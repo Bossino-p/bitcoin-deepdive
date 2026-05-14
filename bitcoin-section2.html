@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 2 — Origin Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --btc:       #F7931A;
+    --btc-dim:   #a85e08;
+    --btc-glow:  rgba(247,147,26,.18);
+    --ink:       #0a0a0a;
+    --ink-2:     #111111;
+    --ink-3:     #1a1a1a;
+    --ruled:     rgba(255,255,255,.045);
+    --muted:     rgba(255,255,255,.38);
+    --faint:     rgba(255,255,255,.12);
+    --text:      rgba(255,255,255,.92);
+    --font-disp: 'Bebas Neue', sans-serif;
+    --font-body: 'Newsreader', serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SECTION WRAPPER ──────────────────────────────────── */
+  .origin {
+    position: relative;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  /* faint ruled lines — same as hero */
+  .origin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 47px,
+      var(--ruled) 47px,
+      var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── SECTION LABEL ────────────────────────────────────── */
+  .section-label {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: clamp(48px, 6vw, 80px);
+  }
+
+  .section-label-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--btc);
+  }
+
+  .section-label-line {
+    flex: 1;
+    height: 1px;
+    background: var(--faint);
+    max-width: 120px;
+  }
+
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+
+  /* ── LAYOUT: timeline spine + content ────────────────── */
+  .timeline {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 120px 1px 1fr;
+    gap: 0 40px;
+  }
+
+  /* the vertical spine line */
+  .timeline::after {
+    content: '';
+    position: absolute;
+    left: calc(120px + 40px);
+    top: 12px;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      var(--btc-dim),
+      var(--faint) 60%,
+      transparent
+    );
+    z-index: 0;
+  }
+
+  /* ── MOMENT: one date + content block ─────────────────── */
+  .moment {
+    display: contents;
+  }
+
+  .moment-date {
+    text-align: right;
+    padding-top: 4px;
+    padding-bottom: clamp(56px, 7vw, 96px);
+  }
+
+  .date-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--btc);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .date-full {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .06em;
+    display: block;
+    line-height: 1.6;
+  }
+
+  /* the node dot on the spine */
+  .moment-node {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 8px;
+    position: relative;
+    z-index: 1;
+    padding-bottom: clamp(56px, 7vw, 96px);
+  }
+
+  .node-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--btc);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px var(--ink), 0 0 0 4px var(--btc-dim);
+    margin-top: 2px;
+  }
+
+  .node-dot.dim {
+    background: var(--muted);
+    box-shadow: 0 0 0 3px var(--ink), 0 0 0 4px rgba(255,255,255,.15);
+  }
+
+  /* content column */
+  .moment-content {
+    padding-bottom: clamp(56px, 7vw, 96px);
+  }
+
+  .moment-title {
+    font-family: var(--font-disp);
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 20px;
+    letter-spacing: .02em;
+  }
+
+  .moment-title .accent { color: var(--btc); }
+
+  .moment-body {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.5vw, 19px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.7);
+    max-width: 600px;
+  }
+
+  .moment-body p + p { margin-top: 18px; }
+
+  .moment-body strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .moment-body em {
+    font-style: italic;
+    color: rgba(255,255,255,.55);
+  }
+
+  /* ── GENESIS HEADLINE — newspaper clipping ───────────── */
+  .genesis-clipping {
+    margin: 36px 0 32px;
+    max-width: 520px;
+    position: relative;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,.6));
+  }
+
+  /* jagged torn-paper top edge via SVG mask path */
+  .clipping-tear-top {
+    display: block;
+    width: 100%;
+    height: 14px;
+    background: #e8e0cc;
+  }
+
+  .clipping-body {
+    background: #e8e0cc;
+    padding: 22px 28px 24px;
+    position: relative;
+  }
+
+  /* subtle grain texture overlay */
+  .clipping-body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,.03) 3px,
+        rgba(0,0,0,.03) 4px
+      );
+    pointer-events: none;
+  }
+
+  .clipping-masthead {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 400;
+    color: #1a1610;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    border-bottom: 2px solid #1a1610;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .clipping-dateline {
+    font-family: var(--font-body);
+    font-size: 10px;
+    color: #4a4030;
+    font-style: italic;
+    letter-spacing: .04em;
+    margin-bottom: 12px;
+  }
+
+  .clipping-headline {
+    font-family: var(--font-body);
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 400;
+    color: #0e0c08;
+    line-height: 1.25;
+    letter-spacing: .01em;
+    margin-bottom: 12px;
+  }
+
+  .clipping-subhead {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: #3a3020;
+    line-height: 1.5;
+    border-top: 1px solid #bbb4a0;
+    padding-top: 10px;
+    font-style: italic;
+  }
+
+  /* jagged torn-paper bottom edge */
+  .clipping-tear-bottom {
+    display: block;
+    width: 100%;
+    height: 14px;
+    background: #e8e0cc;
+    clip-path: polygon(
+      0% 0%, 3% 100%, 6% 20%, 9% 90%, 13% 10%,
+      17% 80%, 21% 5%,  25% 95%, 29% 15%, 33% 85%,
+      37% 0%,  41% 100%,45% 20%, 49% 90%, 53% 5%,
+      57% 80%, 61% 15%, 65% 95%, 69% 10%, 73% 85%,
+      77% 0%,  81% 100%,85% 25%, 89% 90%, 93% 5%,
+      97% 80%, 100% 0%
+    );
+  }
+
+  .clipping-hex {
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    color: var(--muted);
+    letter-spacing: .05em;
+    line-height: 1.8;
+    word-break: break-all;
+    border-top: 1px solid var(--faint);
+    padding-top: 10px;
+  }
+
+  /* ── HAL FINNEY ASIDE ─────────────────────────────────── */
+  .aside {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: var(--ink-2);
+    border: 0.5px solid var(--faint);
+    border-radius: 4px;
+    max-width: 580px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .aside-marker {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--btc);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    align-self: center;
+  }
+
+  .aside-text {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.2vw, 16px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,.6);
+    font-style: italic;
+  }
+
+  .aside-attribution {
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .06em;
+    font-style: normal;
+  }
+
+  /* ── CLOSING LINE ─────────────────────────────────────── */
+  .origin-close {
+    position: relative;
+    z-index: 1;
+    margin-top: 16px;
+    padding-top: 40px;
+    border-top: 1px solid var(--faint);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .close-rule {
+    width: 40px;
+    height: 1px;
+    background: var(--btc-dim);
+    flex-shrink: 0;
+  }
+
+  .close-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── SCROLL ANIMATIONS ────────────────────────────────── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .timeline {
+      grid-template-columns: 72px 1px 1fr;
+      gap: 0 20px;
+    }
+    .timeline::after { left: calc(72px + 20px); }
+    .date-label { font-size: 10px; }
+    .genesis-block { padding: 20px; }
+    .aside { grid-template-columns: 1fr; }
+    .aside-marker { writing-mode: horizontal-tb; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="origin" id="origin">
+
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">Origin</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">02 / 09</span>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+
+    <!-- ── MOMENT 1: The Crisis ──────────────────────────── -->
+    <div class="moment-date fade-in">
+      <span class="date-label">2008</span>
+      <span class="date-full">September–<br>October</span>
+    </div>
+    <div class="moment-node fade-in">
+      <div class="node-dot"></div>
+    </div>
+    <div class="moment-content fade-in">
+      <h2 class="moment-title">The system<br><span class="accent">breaks</span></h2>
+      <div class="moment-body">
+        <p>
+          Lehman Brothers collapses on September 15, 2008.
+          Within weeks, governments across the world begin
+          the largest coordinated money-printing exercise in
+          modern history. <strong>Trillions conjured from nothing</strong>
+          to rescue institutions that had gambled with
+          everyone else's savings — and lost.
+        </p>
+        <p>
+          The people who caused the crisis were made whole.
+          The people who had nothing to do with it were handed
+          the bill. This was not a bug. It was the system
+          working exactly as designed: <strong>gains are privatised,
+          losses are socialised</strong>, and the mechanism that
+          makes it possible is the monopoly on money creation.
+        </p>
+        <p>
+          Somewhere, someone was already writing the alternative.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── MOMENT 2: The Whitepaper ──────────────────────── -->
+    <div class="moment-date fade-in">
+      <span class="date-label">Oct 31</span>
+      <span class="date-full">2008</span>
+    </div>
+    <div class="moment-node fade-in">
+      <div class="node-dot"></div>
+    </div>
+    <div class="moment-content fade-in">
+      <h2 class="moment-title">Nine pages<br><span class="accent">change</span> everything</h2>
+      <div class="moment-body">
+        <p>
+          On Halloween 2008, a message appears on a cryptography
+          mailing list from someone calling themselves
+          <strong>Satoshi Nakamoto</strong>. No institution behind the name.
+          No credentials offered. Just a link and a subject line:
+          <em>"Bitcoin: A Peer-to-Peer Electronic Cash System."</em>
+        </p>
+        <p>
+          Nine pages. The whitepaper solves a problem that
+          had stumped cryptographers for decades — how do you
+          prevent someone from spending the same digital money
+          twice, without a trusted third party in the middle?
+          The answer is the blockchain: a public ledger,
+          maintained by everyone, owned by no one,
+          <strong>tampered with by no one</strong>.
+        </p>
+        <p>
+          Satoshi's identity remains unknown to this day.
+          It doesn't matter. The code was released. Bitcoin
+          belongs to no one — which means it belongs to everyone.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── MOMENT 3: Genesis Block ───────────────────────── -->
+    <div class="moment-date fade-in">
+      <span class="date-label">Jan 3</span>
+      <span class="date-full">2009<br>18:15:05 UTC</span>
+    </div>
+    <div class="moment-node fade-in">
+      <div class="node-dot"></div>
+    </div>
+    <div class="moment-content fade-in">
+      <h2 class="moment-title">Block <span class="accent">zero</span></h2>
+      <div class="moment-body">
+        <p>
+          The genesis block is mined. The first 50 bitcoin
+          are created — unspendable by design, a founding
+          gesture, not a reward. The network exists.
+          It has never stopped producing blocks since.
+        </p>
+        <p>
+          Satoshi embeds a message in the raw data of that
+          first block. Not hidden — anyone can read it.
+          A timestamp. A witness statement. A reason.
+        </p>
+      </div>
+
+      <!-- THE HEADLINE — newspaper clipping -->
+      <div class="genesis-clipping fade-in" role="figure" aria-label="Newspaper clipping embedded in Bitcoin's genesis block">
+        <svg class="clipping-tear-top" viewBox="0 0 400 14" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 0 Q10 14 20 5 Q30 14 40 2 Q50 14 60 6 Q70 14 80 1 Q90 14 100 4 Q110 14 120 7 Q130 14 140 2 Q150 14 160 5 Q170 14 180 3 Q190 14 200 6 Q210 14 220 1 Q230 14 240 8 Q250 14 260 3 Q270 14 280 5 Q290 14 300 2 Q310 14 320 7 Q330 14 340 4 Q350 14 360 1 Q370 14 380 6 Q390 14 400 3 L400 0 Z" fill="#e8e0cc"/>
+        </svg>
+        <div class="clipping-body">
+          <div class="clipping-masthead">
+            <span>The Times</span>
+            <span style="font-size:9px;letter-spacing:.06em">London</span>
+          </div>
+          <p class="clipping-dateline">Saturday, January 3, 2009</p>
+          <h3 class="clipping-headline">Chancellor on brink of second<br>bailout for banks</h3>
+          <p class="clipping-subhead">Alistair Darling has been forced to consider a second bailout for banks as the lending drought worsens...</p>
+        </div>
+        <svg class="clipping-tear-bottom" viewBox="0 0 400 14" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 14 Q10 0 20 9 Q30 0 40 12 Q50 0 60 8 Q70 0 80 13 Q90 0 100 10 Q110 0 120 7 Q130 0 140 12 Q150 0 160 9 Q170 0 180 11 Q190 0 200 8 Q210 0 220 13 Q230 0 240 6 Q250 0 260 11 Q270 0 280 9 Q290 0 300 12 Q310 0 320 7 Q330 0 340 10 Q350 0 360 13 Q370 0 380 8 Q390 0 400 11 L400 14 Z" fill="#e8e0cc"/>
+        </svg>
+        <p class="clipping-hex">
+          Embedded raw: 04ffff001d01044554686520 54696d65732030332f4a616e2f<br>
+          3230303920 436861 6e63656c6c6f72206f6e206272696e6b...<br>
+          Immutable. Every node carries this. Forever.
+        </p>
+      </div>
+
+      <div class="moment-body" style="margin-top: 24px;">
+        <p>
+          The choice was deliberate. Not a random string,
+          not a technical test — a <strong>declaration of intent</strong>,
+          written into the foundation of the network itself.
+          Bitcoin was not built despite the financial crisis.
+          It was built <strong>because of it</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── MOMENT 4: First Transaction ──────────────────── -->
+    <div class="moment-date fade-in">
+      <span class="date-label">Jan 12</span>
+      <span class="date-full">2009</span>
+    </div>
+    <div class="moment-node fade-in">
+      <div class="node-dot"></div>
+    </div>
+    <div class="moment-content fade-in">
+      <h2 class="moment-title">The first<br><span class="accent">transmission</span></h2>
+      <div class="moment-body">
+        <p>
+          Nine days after the genesis block, Satoshi sends
+          10 bitcoin to <strong>Hal Finney</strong> — a cryptographer,
+          a cypherpunk, one of the few people paying attention.
+          Transaction 4a5e1e. The first peer-to-peer transfer
+          of value with no bank, no intermediary, no permission
+          required from anyone.
+        </p>
+      </div>
+
+      <!-- HAL FINNEY ASIDE -->
+      <div class="aside fade-in">
+        <span class="aside-marker">Hal Finney</span>
+        <div>
+          <p class="aside-text">
+            "Running bitcoin."
+          </p>
+          <p class="aside-text" style="margin-top: 10px;">
+            Three words posted to Twitter on January 10, 2009.
+            The entirety of what he said publicly about
+            receiving the first Bitcoin transaction.
+            Hal Finney died in 2014 from ALS. His body
+            is cryopreserved. His bitcoin remain unspent.
+          </p>
+          <p class="aside-attribution">— @halfin, January 10 2009</p>
+        </div>
+      </div>
+
+      <div class="moment-body" style="margin-top: 28px;">
+        <p>
+          For the next two years, Bitcoin has no price.
+          It is an experiment. A curiosity. A proof that
+          it could be done. The people involved are not
+          investors — they are <strong>believers in a protocol</strong>.
+        </p>
+        <p>
+          That is what Bitcoin still is, under everything else
+          that has been layered on top of it.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── MOMENT 5: The early network ──────────────────── -->
+    <div class="moment-date fade-in">
+      <span class="date-label">2009–</span>
+      <span class="date-full">2010</span>
+    </div>
+    <div class="moment-node fade-in">
+      <div class="node-dot dim"></div>
+    </div>
+    <div class="moment-content fade-in">
+      <h2 class="moment-title">Before<br><span class="accent">the price</span></h2>
+      <div class="moment-body">
+        <p>
+          May 22, 2010: a programmer named Laszlo Hanyecz
+          pays 10,000 bitcoin for two pizzas. The first
+          real-world commercial transaction. At the time,
+          a reasonable trade. Today, those 10,000 BTC
+          are worth hundreds of millions of dollars —
+          and <em>Bitcoin Pizza Day</em> is celebrated every year
+          not as a mistake, but as a milestone.
+          <strong>Bitcoin had a price. The experiment was real.</strong>
+        </p>
+        <p>
+          Satoshi disappears from public communication in
+          late 2010, handing the project to the developer
+          community. No farewell. No exit interview.
+          Just gone — leaving behind an open protocol,
+          a fixed supply, and a running network.
+        </p>
+        <p>
+          Everything that follows is the story of what
+          happens when you release genuinely neutral money
+          into a world that has never had it.
+        </p>
+      </div>
+    </div>
+
+  </div><!-- end .timeline -->
+
+  <!-- CLOSING LINE -->
+  <div class="origin-close fade-in">
+    <span class="close-rule"></span>
+    <span class="close-text">
+      The genesis block has been in continuous operation since January 3, 2009.<br>
+      Over 900,000 blocks mined. Zero downtime. Zero bailouts. Zero exceptions.
+    </span>
+  </div>
+
+</section>
+
+<script>
+  // scroll-triggered fade-ins
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    }),
+    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 3 — The Timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --btc:       #F7931A;
+    --btc-dim:   #a85e08;
+    --btc-glow:  rgba(247,147,26,.18);
+    --ink:       #0a0a0a;
+    --ink-2:     #111111;
+    --ink-3:     #1a1a1a;
+    --ruled:     rgba(255,255,255,.045);
+    --muted:     rgba(255,255,255,.38);
+    --faint:     rgba(255,255,255,.12);
+    --text:      rgba(255,255,255,.92);
+    --font-disp: 'Bebas Neue', sans-serif;
+    --font-body: 'Newsreader', serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+
+    /* tonal palette for event types */
+    --tone-dark:      rgba(180,40,40,.12);
+    --tone-dark-bdr:  rgba(180,40,40,.4);
+    --tone-dark-txt:  #e87070;
+    --tone-halving:   rgba(247,147,26,.10);
+    --tone-halving-bdr: rgba(247,147,26,.5);
+    --tone-mile:      rgba(255,255,255,.04);
+    --tone-mile-bdr:  rgba(255,255,255,.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SECTION WRAPPER ──────────────────────────────────── */
+  .timeline-section {
+    position: relative;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+    overflow: hidden;
+  }
+
+  .timeline-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 47px,
+      var(--ruled) 47px, var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── SECTION LABEL ────────────────────────────────────── */
+  .section-label {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: clamp(56px, 7vw, 96px);
+  }
+  .section-label-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--btc);
+  }
+  .section-label-line {
+    flex: 1; height: 1px;
+    background: var(--faint);
+    max-width: 120px;
+  }
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+
+  /* ── ERA BLOCK ────────────────────────────────────────── */
+  .era {
+    position: relative;
+    z-index: 1;
+    margin-bottom: clamp(64px, 9vw, 120px);
+  }
+
+  .era-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: clamp(36px, 4vw, 56px);
+  }
+
+  .era-name {
+    font-family: var(--font-disp);
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 1;
+    color: var(--text);
+    letter-spacing: .02em;
+  }
+
+  .era-years {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+
+  .era-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--faint), transparent);
+    margin-left: 8px;
+  }
+
+  /* ── ALTERNATING SPINE ────────────────────────────────── */
+  .spine-wrap {
+    position: relative;
+  }
+
+  /* the centre spine line */
+  .spine-wrap::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--faint) 8%,
+      var(--faint) 92%,
+      transparent
+    );
+    z-index: 0;
+  }
+
+  /* ── EVENT ROW ────────────────────────────────────────── */
+  .event {
+    display: grid;
+    grid-template-columns: 1fr 56px 1fr;
+    align-items: start;
+    gap: 0 0;
+    margin-bottom: clamp(28px, 3vw, 44px);
+    position: relative;
+  }
+
+  /* left-side event */
+  .event.left .event-card  { grid-column: 1; grid-row: 1; text-align: right; padding-right: 36px; }
+  .event.left .event-node  { grid-column: 2; grid-row: 1; }
+  .event.left .event-empty { grid-column: 3; grid-row: 1; }
+
+  /* right-side event */
+  .event.right .event-empty { grid-column: 1; grid-row: 1; }
+  .event.right .event-node  { grid-column: 2; grid-row: 1; }
+  .event.right .event-card  { grid-column: 3; grid-row: 1; text-align: left; padding-left: 36px; }
+
+  /* ── EVENT NODE (spine dot) ───────────────────────────── */
+  .event-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 14px;
+    z-index: 2;
+  }
+
+  .node-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .node-dot.milestone  { background: var(--btc); box-shadow: 0 0 0 3px var(--ink), 0 0 0 4.5px var(--btc-dim); }
+  .node-dot.dark-event { background: var(--tone-dark-txt); box-shadow: 0 0 0 3px var(--ink), 0 0 0 4.5px rgba(180,40,40,.5); }
+  .node-dot.halving    { background: var(--btc); box-shadow: 0 0 0 3px var(--ink), 0 0 0 4.5px var(--btc), 0 0 12px var(--btc-glow); }
+  .node-dot.neutral    { background: var(--muted); box-shadow: 0 0 0 3px var(--ink), 0 0 0 4.5px rgba(255,255,255,.2); }
+
+  /* ── EVENT CARD ───────────────────────────────────────── */
+  .event-card {
+    border-radius: 4px;
+    padding: clamp(16px, 2vw, 22px) clamp(18px, 2vw, 26px);
+    border: 0.5px solid;
+    transition: border-color .2s, background .2s;
+  }
+
+  .event-card.milestone  { background: var(--tone-mile);    border-color: var(--tone-mile-bdr); }
+  .event-card.dark-event { background: var(--tone-dark);    border-color: var(--tone-dark-bdr); }
+  .event-card.halving    { background: var(--tone-halving); border-color: var(--tone-halving-bdr); }
+  .event-card.neutral    { background: var(--tone-mile);    border-color: var(--tone-mile-bdr); }
+
+  .event-card:hover { border-color: var(--faint); background: var(--ink-3); }
+
+  .event-date {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .event-card.milestone  .event-date { color: var(--btc); }
+  .event-card.dark-event .event-date { color: var(--tone-dark-txt); }
+  .event-card.halving    .event-date { color: var(--btc); }
+  .event-card.neutral    .event-date { color: var(--muted); }
+
+  .event-title {
+    font-family: var(--font-disp);
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: .02em;
+  }
+
+  /* key events get larger title */
+  .event-card.key .event-title { font-size: clamp(26px, 3vw, 40px); }
+
+  .event-body {
+    font-family: var(--font-body);
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(255,255,255,.6);
+  }
+
+  .event-body strong { color: var(--text); font-weight: 400; }
+
+  .event-tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 0.5px solid;
+  }
+  .event-card.halving .event-tag    { color: var(--btc); border-color: var(--btc-dim); background: var(--btc-glow); }
+  .event-card.dark-event .event-tag { color: var(--tone-dark-txt); border-color: var(--tone-dark-bdr); background: var(--tone-dark); }
+
+  /* obituary badge — for crash events */
+  .obit-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--tone-dark-txt);
+    border: 0.5px solid var(--tone-dark-bdr);
+    background: var(--tone-dark);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+  .obit-icon { font-size: 10px; }
+
+  /* price note */
+  .price-note {
+    display: block;
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .06em;
+  }
+
+  /* ── ERA CLOSE STAT ───────────────────────────────────── */
+  .era-close {
+    margin-top: clamp(32px, 4vw, 52px);
+    padding: 16px 20px;
+    border: 0.5px solid var(--faint);
+    border-radius: 4px;
+    background: var(--ink-2);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .era-close-rule { width: 24px; height: 1px; background: var(--btc-dim); flex-shrink: 0; }
+  .era-close-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .07em;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── SCROLL ANIMATIONS ────────────────────────────────── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .65s ease, transform .65s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE — stack on mobile ────────────────────── */
+  @media (max-width: 700px) {
+    .spine-wrap::before { left: 20px; transform: none; }
+    .event { grid-template-columns: 40px 1fr; }
+
+    .event.left .event-card,
+    .event.right .event-card  { grid-column: 2; grid-row: 1; text-align: left; padding-left: 20px; padding-right: 0; }
+    .event.left .event-node,
+    .event.right .event-node  { grid-column: 1; grid-row: 1; }
+    .event.left .event-empty,
+    .event.right .event-empty { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="timeline-section" id="timeline">
+
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">Timeline</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">03 / 09</span>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- ERA I — THE WILDERNESS                               -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div class="era">
+    <div class="era-header fade-in">
+      <h2 class="era-name">I. The Wilderness</h2>
+      <span class="era-years">2010 — 2013</span>
+      <span class="era-rule"></span>
+    </div>
+
+    <div class="spine-wrap">
+
+      <!-- Pizza Day -->
+      <div class="event left fade-in">
+        <div class="event-card neutral">
+          <span class="event-date">May 22, 2010</span>
+          <h3 class="event-title">10,000 BTC<br>for two pizzas</h3>
+          <p class="event-body">
+            Laszlo Hanyecz makes the first real-world commercial
+            transaction. At the time: a fair deal.
+            <strong>Bitcoin Pizza Day is celebrated every year</strong>
+            not as a mistake, but as proof that Bitcoin had a price.
+            The experiment was real.
+          </p>
+          <span class="price-note">≈ $0.0025 per BTC at the time</span>
+        </div>
+        <div class="event-node"><div class="node-dot neutral"></div></div>
+        <div class="event-empty"></div>
+      </div>
+
+      <!-- First halving -->
+      <div class="event right fade-in">
+        <div class="event-empty"></div>
+        <div class="event-node"><div class="node-dot halving"></div></div>
+        <div class="event-card halving key">
+          <span class="event-date">November 28, 2012</span>
+          <h3 class="event-title">Halving I</h3>
+          <p class="event-body">
+            Block reward drops from 50 BTC to 25 BTC.
+            <strong>The first proof that the supply schedule holds.</strong>
+            No authority voted on it. No announcement needed.
+            The code ran. The issuance halved. The world barely noticed.
+          </p>
+          <span class="event-tag">Block 210,000</span>
+          <span class="price-note">≈ $12 per BTC</span>
+        </div>
+      </div>
+
+      <!-- First bubble -->
+      <div class="event left fade-in">
+        <div class="event-card dark-event">
+          <span class="event-date">April 2013</span>
+          <h3 class="event-title">First Bubble.<br>First Crash.</h3>
+          <p class="event-body">
+            Bitcoin reaches $266 — then collapses 83% in two days.
+            The first of many obituaries is written.
+            <strong>Bitcoin was declared dead for the first time.</strong>
+            It was not the last time.
+          </p>
+          <span class="obit-badge"><span class="obit-icon">✝</span> Obituary #1 of many</span>
+          <span class="price-note">Peak $266 → trough $45</span>
+        </div>
+        <div class="event-node"><div class="node-dot dark-event"></div></div>
+        <div class="event-empty"></div>
+      </div>
+
+    </div><!-- end spine-wrap -->
+
+    <div class="era-close fade-in">
+      <span class="era-close-rule"></span>
+      <span class="era-close-text">
+        By end of 2013, BTC reaches $1,000 for the first time.<br>
+        The internet notices. So does everyone else.
+      </span>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- ERA II — THE WARS                                    -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div class="era">
+    <div class="era-header fade-in">
+      <h2 class="era-name">II. The Wars</h2>
+      <span class="era-years">2014 — 2017</span>
+      <span class="era-rule"></span>
+    </div>
+
+    <div class="spine-wrap">
+
+      <!-- Mt. Gox -->
+      <div class="event right fade-in">
+        <div class="event-empty"></div>
+        <div class="event-node"><div class="node-dot dark-event"></div></div>
+        <div class="event-card dark-event key">
+          <span class="event-date">February 2014</span>
+          <h3 class="event-title">Mt. Gox<br>Collapses</h3>
+          <p class="event-body">
+            The world's largest Bitcoin exchange halts withdrawals
+            and files for bankruptcy. <strong>850,000 BTC lost</strong> —
+            approximately 6% of all bitcoin that will ever exist.
+            Billions in customer funds, gone. Headlines declare
+            Bitcoin finished. <em>They are wrong.</em>
+            The protocol never missed a block. Only the
+            custodian failed — a lesson the network would
+            keep teaching until people listened.
+          </p>
+          <span class="obit-badge"><span class="obit-icon">✝</span> Obituary wave — 2014</span>
+          <span class="price-note">$1,100 → $315 over 12 months</span>
+        </div>
+      </div>
+
+      <!-- Block size wars -->
+      <div class="event left fade-in">
+        <div class="event-card dark-event key">
+          <span class="event-date">2015 — 2017</span>
+          <h3 class="event-title">The Block<br>Size Wars</h3>
+          <p class="event-body">
+            Bitcoin's most dangerous moment — not from outside,
+            but from within. A coalition of large miners,
+            companies, and developers push to increase the
+            block size, arguing it's needed for scale.
+            The counter-argument: <strong>bigger blocks centralise
+            nodes, and centralised nodes are not Bitcoin.</strong>
+            The battle is vicious. Careers end. Alliances
+            shatter. The outcome defines what Bitcoin is
+            for the next decade.
+          </p>
+        </div>
+        <div class="event-node"><div class="node-dot dark-event"></div></div>
+        <div class="event-empty"></div>
+      </div>
+
+      <!-- SegWit + BCH fork -->
+      <div class="event right fade-in">
+        <div class="event-empty"></div>
+        <div class="event-node"><div class="node-dot milestone"></div></div>
+        <div class="event-card milestone">
+          <span class="event-date">August 2017</span>
+          <h3 class="event-title">SegWit Activates.<br>BCH Forks Off.</h3>
+          <p class="event-body">
+            The nodes win. Segregated Witness activates on the
+            Bitcoin network, laying the groundwork for Lightning.
+            The large-block faction forks into Bitcoin Cash
+            and leaves. <strong>Bitcoin's governance model is
+            proven:</strong> you cannot co-opt a network where
+            the users run the rules.
+          </p>
+          <span class="event-tag">Milestone</span>
+        </div>
+      </div>
+
+      <!-- 2017 ATH -->
+      <div class="event left fade-in">
+        <div class="event-card milestone key">
+          <span class="event-date">December 2017</span>
+          <h3 class="event-title">$20,000</h3>
+          <p class="event-body">
+            The first mainstream mania. Every taxi driver,
+            every family dinner, every news broadcast.
+            Futures markets launch. Institutional eyes open.
+            Then — as it always does — it collapses.
+            <strong>Down 84% over the following year.</strong>
+            The tourists leave. The builders stay.
+          </p>
+          <span class="price-note">ATH: $19,783 — Dec 17, 2017</span>
+        </div>
+        <div class="event-node"><div class="node-dot milestone"></div></div>
+        <div class="event-empty"></div>
+      </div>
+
+      <!-- Halving II -->
+      <div class="event right fade-in">
+        <div class="event-empty"></div>
+        <div class="event-node"><div class="node-dot halving"></div></div>
+        <div class="event-card halving">
+          <span class="event-date">July 9, 2016</span>
+          <h3 class="event-title">Halving II</h3>
+          <p class="event-body">
+            Block reward drops from 25 BTC to 12.5 BTC.
+            The supply schedule holds again, indifferent
+            to the chaos surrounding it.
+          </p>
+          <span class="event-tag">Block 420,000</span>
+          <span class="price-note">≈ $650 per BTC</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="era-close fade-in">
+      <span class="era-close-rule"></span>
+      <span class="era-close-text">
+        Bitcoin survived a major exchange collapse, a civil war,<br>
+        and an 84% crash. It entered 2018 smaller — and harder.
+      </span>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- ERA III — THE INSTITUTION                            -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div class="era">
+    <div class="era-header fade-in">
+      <h2 class="era-name">III. The Institution</h2>
+      <span class="era-years">2018 — Present</span>
+      <span class="era-rule"></span>
+    </div>
+
+    <div class="spine-wrap">
+
+      <!-- Halving III -->
+      <div class="event left fade-in">
+        <div class="event-card halving key">
+          <span class="event-date">May 11, 2020</span>
+          <h3 class="event-title">Halving III</h3>
+          <p class="event-body">
+            Block reward drops to 6.25 BTC. MicroStrategy
+            announces its first Bitcoin purchase two months later.
+            <strong>Paul Tudor Jones calls it the fastest horse.</strong>
+            The institutional on-ramp opens — quietly at first,
+            then all at once.
+          </p>
+          <span class="event-tag">Block 630,000</span>
+          <span class="price-note">≈ $8,500 per BTC</span>
+        </div>
+        <div class="event-node"><div class="node-dot halving"></div></div>
+        <div class="event-empty"></div>
+      </div>
+
+      <!-- China ban -->
+      <div class="event right fade-in">
+        <div class="event-empty"></div>
+        <div class="event-node"><div class="node-dot dark-event"></div></div>
+        <div class="event-card dark-event">
+          <span class="event-date">May–June 2021</span>
+          <h3 class="event-title">China Bans<br>Bitcoin. Again.</h3>
+          <p class="event-body">
+            China outlaws Bitcoin mining. <strong>~65% of global
+            hashrate goes offline overnight.</strong> Every prior
+            Bitcoin obituary is reprinted. The network difficulty
+            adjusts. Within six months, hashrate fully recovers —
+            now distributed across the US, Kazakhstan, and
+            Canada. The ban stress-tested the network's
+            geographic resilience. It passed.
+          </p>
+          <span class="obit-badge"><span class="obit-icon">✝</span> Obituary — widely published</span>
+          <span class="price-note">$64k → $29k in 60 days</span>
+        </div>
+      </div>
+
+      <!-- El Salvador -->
+      <div class="event left fade-in">
+        <div class="event-card milestone">
+          <span class="event-date">September 2021</span>
+          <h3 class="event-title">Legal Tender</h3>
+          <p class="event-body">
+            El Salvador makes Bitcoin legal tender —
+            the first sovereign nation to do so.
+            The IMF objects. The bond markets sneer.
+            <strong>The experiment runs anyway.</strong>
+            Bitcoin becomes a geopolitical variable.
+          </p>
+          <span class="event-tag">Milestone</span>
+        </div>
+        <div class="event-node"><div class="node-dot milestone"></div></div>
+        <div class="event-empty"></div>
+      </div>
+
+      <!-- Halving IV -->
+      <div class="event right fade-in">
+        <div class="event-empty"></div>
+        <div class="event-node"><div class="node-dot halving"></div></div>
+        <div class="event-card halving key">
+          <span class="event-date">April 20, 2024</span>
+          <h3 class="event-title">Halving IV</h3>
+          <p class="event-body">
+            Block reward drops to 3.125 BTC. Days earlier,
+            the SEC approves the first US spot Bitcoin ETFs.
+            <strong>BlackRock, Fidelity, and Invesco enter
+            the market.</strong> In its first week, BlackRock's
+            IBIT becomes one of the fastest ETFs to $10B AUM
+            in history. The same institutions that dismissed
+            Bitcoin are now its largest distribution channel.
+          </p>
+          <span class="event-tag">Block 840,000</span>
+          <span class="price-note">≈ $63,000 per BTC at halving</span>
+        </div>
+      </div>
+
+      <!-- ETF approval -->
+      <div class="event left fade-in">
+        <div class="event-card milestone key">
+          <span class="event-date">January 10, 2024</span>
+          <h3 class="event-title">Spot ETF<br>Approved</h3>
+          <p class="event-body">
+            After a decade of rejections, the SEC approves
+            11 spot Bitcoin ETFs simultaneously.
+            A 10-year regulatory war ends in a single ruling.
+            <strong>Bitcoin is now accessible inside every
+            brokerage account in America.</strong>
+            The orange coin is in your 401(k) whether
+            the system likes it or not.
+          </p>
+          <span class="event-tag">Milestone</span>
+        </div>
+        <div class="event-node"><div class="node-dot milestone"></div></div>
+        <div class="event-empty"></div>
+      </div>
+
+    </div>
+
+    <div class="era-close fade-in">
+      <span class="era-close-rule"></span>
+      <span class="era-close-text">
+        Bitcoin has been declared dead 430+ times since 2010.<br>
+        The network has never missed a block. Make of that what you will.
+      </span>
+    </div>
+  </div>
+
+</section>
+
+<script>
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    }),
+    { threshold: 0 }
+  );
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  });
+</script>
+
+</body>
+</html>
