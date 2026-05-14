@@ -14,12 +14,15 @@
   --btc:       #F7931A;
   --btc-dim:   #a85e08;
   --btc-glow:  rgba(247,147,26,.18);
+  --btc-glow2: rgba(247,147,26,.08);
   --ink:       #0a0a0a;
   --ink-2:     #111111;
   --ink-3:     #1a1a1a;
+  --ink-4:     #222222;
   --ruled:     rgba(255,255,255,.045);
   --muted:     rgba(255,255,255,.38);
   --faint:     rgba(255,255,255,.12);
+  --faint2:    rgba(255,255,255,.06);
   --text:      rgba(255,255,255,.92);
   --font-disp: 'Bebas Neue', sans-serif;
   --font-body: 'Newsreader', serif;
@@ -590,46 +593,6 @@ section { padding: clamp(64px,10vh,120px) 0; border-top: 1px solid var(--faint);
   .event.right .event-node  { grid-column: 1; grid-row: 1; }
   .event.left  .event-empty,
   .event.right .event-empty { display: none; }
-}
-
-/* ── CARDS (how it works) ── */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
-  gap: 1px;
-  background: var(--faint);
-  border: 1px solid var(--faint);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 0.5rem;
-}
-.card {
-  background: var(--ink-2);
-  padding: 1.75rem;
-  transition: background .2s;
-}
-.card:hover { background: var(--ink-3); }
-.card-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--btc);
-  margin-bottom: 10px;
-}
-.card h3 {
-  font-family: var(--font-body);
-  font-size: 18px;
-  font-weight: 400;
-  color: var(--text);
-  margin-bottom: 10px;
-}
-.card p {
-  font-family: var(--font-body);
-  font-size: 15px;
-  font-weight: 300;
-  color: var(--muted);
-  line-height: 1.7;
 }
 
 /* ── TOKENOMICS ── */
@@ -1245,6 +1208,450 @@ footer {
     .date-label { font-size: 10px; }
     .aside { grid-template-columns: 1fr; }
     .aside-marker { writing-mode: horizontal-tb; transform: none; }
+  }
+
+/* ── MECHANICS SECTION ───────────────────────────────── */
+  .mechanics {
+    position: relative;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+    overflow: hidden;
+  }
+
+  .mechanics::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 47px,
+      var(--ruled) 47px, var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── INTRO ────────────────────────────────────────────── */
+  .mechanics-intro {
+    position: relative; z-index: 1;
+    max-width: 640px;
+    margin-bottom: clamp(48px, 6vw, 72px);
+  }
+
+  .mechanics-intro h2 {
+    font-family: var(--font-disp);
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: .95;
+    letter-spacing: .02em;
+    margin-bottom: 24px;
+  }
+
+  .mechanics-intro h2 span { color: var(--btc); }
+
+  .mechanics-intro p {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.5vw, 19px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.65);
+  }
+
+  .mechanics-intro p strong { color: var(--text); font-weight: 400; }
+
+  /* ── STEP NAVIGATOR ───────────────────────────────────── */
+  .step-nav {
+    position: relative; z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: clamp(36px, 4vw, 52px);
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .step-nav::-webkit-scrollbar { display: none; }
+
+  .step-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .step-btn-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: 0.5px solid var(--faint);
+    border-radius: 4px;
+    background: var(--ink-2);
+    transition: border-color .2s, background .2s;
+    min-width: 100px;
+  }
+
+  .step-btn:hover .step-btn-inner { border-color: var(--btc-dim); background: var(--ink-3); }
+  .step-btn.active .step-btn-inner { border-color: var(--btc); background: var(--btc-glow2); }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .step-btn.active .step-num { color: var(--btc); }
+
+  .step-icon { font-size: 18px; line-height: 1; }
+
+  .step-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .step-btn.active .step-label { color: var(--text); }
+
+  /* connector arrow between steps */
+  .step-arrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--faint);
+    padding: 0 4px;
+    flex-shrink: 0;
+    padding-bottom: 8px;
+  }
+
+  /* ── STAGE DISPLAY ────────────────────────────────────── */
+  .stage-display {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 3vw, 48px);
+    align-items: start;
+    min-height: 420px;
+  }
+
+  /* explanation panel — left */
+  .stage-explain {
+    padding: clamp(24px, 2.5vw, 36px);
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    background: var(--ink-2);
+  }
+
+  .stage-number {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--btc);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .stage-title {
+    font-family: var(--font-disp);
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 18px;
+    letter-spacing: .02em;
+  }
+
+  .stage-body {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.3vw, 17px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.65);
+  }
+
+  .stage-body p + p { margin-top: 14px; }
+  .stage-body strong { color: var(--text); font-weight: 400; }
+  .stage-body em { font-style: italic; color: rgba(255,255,255,.45); }
+  .stage-body code {
+    font-family: var(--font-mono);
+    font-size: .85em;
+    color: var(--btc);
+    background: var(--btc-glow2);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  .stage-key-fact {
+    margin-top: 20px;
+    padding: 14px 16px;
+    border-left: 2px solid var(--btc);
+    background: var(--btc-glow2);
+    border-radius: 0 4px 4px 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .04em;
+    color: rgba(255,255,255,.7);
+    line-height: 1.7;
+  }
+
+  /* visual panel — right */
+  .stage-visual {
+    padding: clamp(20px, 2.5vw, 32px);
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    background: var(--ink-2);
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .visual-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* ── STAGE TRANSITIONS ────────────────────────────────── */
+  .stage-panel {
+    display: none;
+    animation: stageFade .35s ease;
+  }
+  .stage-panel.active { display: contents; }
+
+  @keyframes stageFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── VISUAL COMPONENTS ────────────────────────────────── */
+
+  .utxo-chip {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 12px;
+    border: 0.5px solid var(--btc-dim);
+    border-radius: 4px;
+    background: var(--btc-glow2);
+  }
+  .utxo-chip .uc-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; color: var(--btc-dim); text-transform: uppercase; }
+  .utxo-chip .uc-value { font-family: var(--font-mono); font-size: 13px; color: var(--btc); font-weight: 500; }
+  .utxo-chip .uc-addr  { font-family: var(--font-mono); font-size: 9px; color: var(--muted); letter-spacing: .04em; }
+
+  .flow-arrow {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--btc-dim);
+    text-align: center;
+    padding: 2px 0;
+  }
+
+  .tx-box {
+    padding: 12px 14px;
+    border: 0.5px solid var(--faint);
+    border-radius: 4px;
+    background: var(--ink-3);
+  }
+  .tx-box .tx-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    padding: 3px 0;
+    border-bottom: 0.5px solid var(--faint2);
+  }
+  .tx-box .tx-row:last-child { border-bottom: none; }
+  .tx-box .tx-row .tx-val { color: var(--text); }
+  .tx-box .tx-row .tx-val.orange { color: var(--btc); }
+  .tx-box .tx-row .tx-val.green  { color: #7bc67e; }
+  .tx-box .tx-row .tx-val.addr   { color: var(--muted); font-size: 9px; letter-spacing: .03em; }
+
+  .mempool-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 3px;
+    border: 0.5px solid var(--faint2);
+    background: var(--ink-3);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    transition: background .2s;
+  }
+  .mempool-row.highlighted { border-color: var(--btc-dim); background: var(--btc-glow2); }
+  .mempool-row .mp-txid { color: var(--muted); font-size: 9px; }
+  .mempool-row .mp-size { color: var(--muted); font-size: 9px; }
+  .mempool-row .mp-fee  { font-weight: 500; }
+  .mp-fee.high   { color: #7bc67e; }
+  .mp-fee.medium { color: var(--btc); }
+  .mp-fee.low    { color: var(--muted); }
+
+  .block-visual {
+    border: 1px solid var(--btc-dim);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .block-header-bar {
+    background: var(--btc-glow);
+    border-bottom: 0.5px solid var(--btc-dim);
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .block-header-bar .bh-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--btc); }
+  .block-header-bar .bh-num   { font-family: var(--font-mono); font-size: 11px; color: var(--text); font-weight: 500; }
+  .block-tx-list { padding: 8px 0; }
+  .block-tx-item {
+    padding: 6px 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--muted);
+    border-bottom: 0.5px solid var(--faint2);
+    display: flex;
+    justify-content: space-between;
+  }
+  .block-tx-item:last-child { border-bottom: none; }
+  .block-tx-item.our-tx { color: var(--btc); background: var(--btc-glow2); }
+  .block-footer {
+    padding: 8px 12px;
+    border-top: 0.5px solid var(--faint);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .block-footer .bf-item { display: flex; flex-direction: column; gap: 2px; }
+  .block-footer .bf-label { font-family: var(--font-mono); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .block-footer .bf-value { font-family: var(--font-mono); font-size: 10px; color: var(--text); }
+
+  .conf-meter {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .conf-block-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .conf-block-box {
+    width: 36px; height: 36px;
+    border-radius: 3px;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    flex-shrink: 0;
+    transition: background .3s, border-color .3s;
+  }
+  .conf-block-box.confirmed    { background: var(--btc-glow); border: 1px solid var(--btc); color: var(--btc); }
+  .conf-block-box.unconfirmed  { background: var(--ink-3); border: 0.5px solid var(--faint); color: var(--muted); }
+  .conf-block-text { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: .04em; }
+  .conf-block-text .conf-highlight { color: var(--text); }
+
+  .hash-display {
+    padding: 14px;
+    background: var(--ink-3);
+    border: 0.5px solid var(--faint);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .06em;
+    line-height: 1.8;
+    word-break: break-all;
+  }
+  .hash-display .hash-invalid { color: #e87070; }
+  .hash-display .hash-valid   { color: #7bc67e; }
+  .hash-display .hash-label   { color: var(--muted); font-size: 9px; display: block; margin-bottom: 6px; letter-spacing: .14em; text-transform: uppercase; }
+
+  .nonce-counter {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--ink-3);
+    border: 0.5px solid var(--faint);
+    border-radius: 4px;
+  }
+  .nonce-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .nonce-value { font-family: var(--font-mono); font-size: 22px; font-weight: 500; color: var(--text); }
+  .nonce-unit  { font-family: var(--font-mono); font-size: 9px; color: var(--muted); }
+
+  /* ── STEP PROGRESS DOTS ───────────────────────────────── */
+  .step-progress {
+    position: relative; z-index: 1;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: clamp(28px, 3vw, 40px);
+  }
+  .progress-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--faint);
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+    border: none;
+    padding: 0;
+  }
+  .progress-dot.active { background: var(--btc); transform: scale(1.4); }
+  .progress-dot:hover  { background: var(--btc-dim); }
+
+  /* ── NEXT / PREV CONTROLS ─────────────────────────────── */
+  .stage-controls {
+    position: relative; z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: clamp(24px, 2.5vw, 36px);
+  }
+
+  .ctrl-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: none;
+    border: 0.5px solid var(--faint);
+    border-radius: 3px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+  .ctrl-btn:hover { color: var(--text); border-color: var(--btc-dim); background: var(--btc-glow2); }
+  .ctrl-btn:disabled { opacity: .25; cursor: default; pointer-events: none; }
+  .ctrl-btn .arrow { font-size: 14px; }
+
+  .stage-counter {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+  .stage-counter span { color: var(--text); }
+
+  /* ── MECHANICS RESPONSIVE ─────────────────────────────── */
+  @media (max-width: 768px) {
+    .stage-display { grid-template-columns: 1fr; }
+    .step-btn-inner { min-width: 80px; padding: 8px 10px; }
+    .step-label { font-size: 9px; }
   }
 </style>
 </head>
@@ -1918,43 +2325,465 @@ footer {
 <!-- ──────────────────────────────────────────
      4. HOW IT WORKS
      ────────────────────────────────────────── -->
-<section id="mechanics">
-  <div class="s-inner">
-    <p class="s-label reveal">// 003 &mdash; Mechanics</p>
-    <h2 class="s-heading reveal">How It<br>Works</h2>
-    <div class="card-grid reveal">
-      <div class="card">
-        <div class="card-label">Transactions</div>
-        <h3>Inputs &amp; Outputs</h3>
-        <p>A transaction consumes previous unspent outputs (UTXOs) and creates new ones. The signature proves ownership of the private key without ever revealing it.</p>
+<section class="mechanics" id="mechanics">
+
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">How It Works</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">04 / 09</span>
+  </div>
+
+  <!-- INTRO -->
+  <div class="mechanics-intro fade-in">
+    <h2>Follow a transaction<br><span>from wallet to chain</span></h2>
+    <p>
+      No banks. No intermediaries. No permission required.
+      <strong>A Bitcoin transaction is a cryptographically signed instruction</strong>
+      that travels peer-to-peer across thousands of nodes worldwide,
+      gets validated, mined into a block, and permanently recorded.
+      Here is exactly how that happens — step by step.
+    </p>
+  </div>
+
+  <!-- STEP NAVIGATOR -->
+  <nav class="step-nav fade-in" aria-label="Transaction stages">
+    <button class="step-btn active" onclick="goToStep(0)" aria-label="Step 1: Wallet">
+      <div class="step-btn-inner">
+        <span class="step-num">01</span>
+        <span class="step-icon">🔑</span>
+        <span class="step-label">Wallet</span>
       </div>
-      <div class="card">
-        <div class="card-label">UTXO Model</div>
-        <h3>No Accounts</h3>
-        <p>Bitcoin has no accounts. Your "balance" is the sum of UTXOs locked to your public key. Spending means signing to redirect those outputs to new addresses.</p>
+    </button>
+    <span class="step-arrow">›</span>
+    <button class="step-btn" onclick="goToStep(1)" aria-label="Step 2: Sign & Broadcast">
+      <div class="step-btn-inner">
+        <span class="step-num">02</span>
+        <span class="step-icon">📡</span>
+        <span class="step-label">Broadcast</span>
       </div>
-      <div class="card">
-        <div class="card-label">Proof of Work</div>
-        <h3>Mining</h3>
-        <p>Miners compete to find a hash below a target by varying a nonce. Difficulty adjusts every 2,016 blocks to hold a 10-minute average. Work = energy. Energy cannot be faked.</p>
+    </button>
+    <span class="step-arrow">›</span>
+    <button class="step-btn" onclick="goToStep(2)" aria-label="Step 3: Mempool">
+      <div class="step-btn-inner">
+        <span class="step-num">03</span>
+        <span class="step-icon">⏳</span>
+        <span class="step-label">Mempool</span>
       </div>
-      <div class="card">
-        <div class="card-label">Immutability</div>
-        <h3>The Chain</h3>
-        <p>Each block commits to its predecessor via hash. Rewriting history requires re-doing all accumulated proof of work and outpacing the live network simultaneously. Practically impossible.</p>
+    </button>
+    <span class="step-arrow">›</span>
+    <button class="step-btn" onclick="goToStep(3)" aria-label="Step 4: Mining">
+      <div class="step-btn-inner">
+        <span class="step-num">04</span>
+        <span class="step-icon">⛏</span>
+        <span class="step-label">Mining</span>
       </div>
-      <div class="card">
-        <div class="card-label">Cryptography</div>
-        <h3>Keys &amp; Addresses</h3>
-        <p>A private key is a 256-bit random number. From it: a public key. From that: an address. Ownership is possession of the key. No password reset. No support ticket.</p>
+    </button>
+    <span class="step-arrow">›</span>
+    <button class="step-btn" onclick="goToStep(4)" aria-label="Step 5: Confirmed">
+      <div class="step-btn-inner">
+        <span class="step-num">05</span>
+        <span class="step-icon">✓</span>
+        <span class="step-label">Confirmed</span>
       </div>
-      <div class="card">
-        <div class="card-label">Consensus</div>
-        <h3>No Authority</h3>
-        <p>Nodes independently validate every block against the same rules. No block is accepted on authority alone. The longest valid chain — most accumulated work — wins.</p>
+    </button>
+  </nav>
+
+  <!-- STAGE DISPLAY -->
+  <div class="stage-display fade-in">
+
+    <!-- ── STAGE 1: WALLET ─────────────────────────────── -->
+    <div class="stage-panel active" id="stage-0">
+      <div class="stage-explain">
+        <span class="stage-number">Stage 01 — Wallet</span>
+        <h3 class="stage-title">UTXOs &<br>Private Keys</h3>
+        <div class="stage-body">
+          <p>
+            Your wallet doesn't hold bitcoin the way a bank holds dollars.
+            It holds <strong>private keys</strong> — cryptographic secrets that
+            prove you control certain <strong>unspent transaction outputs (UTXOs)</strong>.
+          </p>
+          <p>
+            Think of UTXOs like physical coins of specific denominations.
+            To send 0.3 BTC, your wallet selects UTXOs whose total value
+            covers the amount — say, one UTXO of 0.5 BTC.
+            It spends that UTXO entirely, sends 0.3 BTC to the recipient,
+            and returns <code>0.197 BTC</code> to yourself as <em>change</em>
+            (the remainder is the miner fee).
+          </p>
+          <p>
+            Your <strong>private key</strong> signs the transaction with
+            ECDSA (or Schnorr post-Taproot), producing a signature that
+            proves ownership without revealing the key itself.
+          </p>
+          <div class="stage-key-fact">
+            Your bitcoin never "move" — what changes is which UTXO
+            is spendable by which key. The ledger records outputs, not balances.
+          </div>
+        </div>
+      </div>
+      <div class="stage-visual">
+        <p class="visual-label">UTXO selection</p>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:.08em">Your wallet's UTXOs</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div class="utxo-chip">
+              <span class="uc-label">UTXO #1 — selected</span>
+              <span class="uc-value">0.50000 BTC</span>
+              <span class="uc-addr">bc1q…4f3a</span>
+            </div>
+            <div class="utxo-chip" style="opacity:.4">
+              <span class="uc-label">UTXO #2</span>
+              <span class="uc-value">0.10000 BTC</span>
+              <span class="uc-addr">bc1q…9e1c</span>
+            </div>
+          </div>
+          <div class="flow-arrow">↓ spend UTXO #1 entirely</div>
+          <div class="tx-box">
+            <div class="tx-row"><span>Input</span><span class="tx-val">0.50000 BTC (UTXO #1)</span></div>
+            <div class="tx-row"><span>→ Recipient</span><span class="tx-val orange">0.30000 BTC</span></div>
+            <div class="tx-row"><span>→ Change (you)</span><span class="tx-val">0.19700 BTC</span></div>
+            <div class="tx-row"><span>Miner fee</span><span class="tx-val orange">0.00300 BTC</span></div>
+          </div>
+          <div class="flow-arrow">↓ signed with private key (ECDSA / Schnorr)</div>
+          <div class="tx-box">
+            <div class="tx-row"><span>TxID</span><span class="tx-val addr">a3f8…c9d2</span></div>
+            <div class="tx-row"><span>Size</span><span class="tx-val">226 vbytes</span></div>
+            <div class="tx-row"><span>Fee rate</span><span class="tx-val orange">13.3 sat/vbyte</span></div>
+            <div class="tx-row"><span>Status</span><span class="tx-val" style="color:#7bc67e">Signed ✓</span></div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- ── STAGE 2: BROADCAST ──────────────────────────── -->
+    <div class="stage-panel" id="stage-1">
+      <div class="stage-explain">
+        <span class="stage-number">Stage 02 — Broadcast</span>
+        <h3 class="stage-title">The Network<br>Receives It</h3>
+        <div class="stage-body">
+          <p>
+            The signed transaction is broadcast to the Bitcoin network —
+            a peer-to-peer mesh of approximately <strong>15,000+ reachable nodes</strong>
+            worldwide. Your wallet sends it to a handful of nodes it's
+            connected to. Each node validates it and relays it onwards.
+            Within seconds, the transaction has propagated globally.
+          </p>
+          <p>
+            Every node performs the same checks independently:
+            is the signature valid? Are the UTXOs unspent?
+            Does the fee meet the minimum relay threshold?
+            <strong>No single node is in charge.</strong>
+            Consensus is the result of thousands of independent validators
+            reaching the same conclusion.
+          </p>
+          <p>
+            If any check fails — forged signature, already-spent UTXO,
+            zero fee — every honest node silently drops the transaction.
+            It never reaches the mempool. No error message. No appeal.
+          </p>
+          <div class="stage-key-fact">
+            There is no central server. "The network" is every node
+            simultaneously. It cannot be taken down by targeting one point.
+          </div>
+        </div>
+      </div>
+      <div class="stage-visual">
+        <p class="visual-label">Network propagation</p>
+        <div style="position:relative;flex:1;min-height:280px">
+          <svg viewBox="0 0 320 280" width="100%" style="overflow:visible">
+            <!-- edges -->
+            <g stroke="rgba(255,255,255,.1)" stroke-width="1" fill="none">
+              <line x1="160" y1="140" x2="80"  y2="80"/>
+              <line x1="160" y1="140" x2="240" y2="80"/>
+              <line x1="160" y1="140" x2="60"  y2="190"/>
+              <line x1="160" y1="140" x2="260" y2="190"/>
+              <line x1="160" y1="140" x2="160" y2="240"/>
+              <line x1="80"  y1="80"  x2="40"  y2="40"/>
+              <line x1="80"  y1="80"  x2="130" y2="40"/>
+              <line x1="240" y1="80"  x2="200" y2="30"/>
+              <line x1="240" y1="80"  x2="290" y2="50"/>
+              <line x1="60"  y1="190" x2="20"  y2="230"/>
+              <line x1="260" y1="190" x2="300" y2="230"/>
+              <line x1="160" y1="240" x2="120" y2="270"/>
+              <line x1="160" y1="240" x2="200" y2="270"/>
+            </g>
+            <!-- animated propagation rings -->
+            <circle cx="160" cy="140" r="0" fill="none" stroke="#F7931A" stroke-width="1.5" opacity=".8">
+              <animate attributeName="r" from="0" to="120" dur="2.5s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" from=".8" to="0" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="160" cy="140" r="0" fill="none" stroke="#F7931A" stroke-width="1" opacity=".5">
+              <animate attributeName="r" from="0" to="120" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" from=".5" to="0" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+            </circle>
+            <!-- nodes -->
+            <g fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.25)" stroke-width="1">
+              <circle cx="80"  cy="80"  r="7"/>
+              <circle cx="240" cy="80"  r="7"/>
+              <circle cx="60"  cy="190" r="7"/>
+              <circle cx="260" cy="190" r="7"/>
+              <circle cx="160" cy="240" r="7"/>
+              <circle cx="40"  cy="40"  r="5"/>
+              <circle cx="130" cy="40"  r="5"/>
+              <circle cx="200" cy="30"  r="5"/>
+              <circle cx="290" cy="50"  r="5"/>
+              <circle cx="20"  cy="230" r="5"/>
+              <circle cx="300" cy="230" r="5"/>
+              <circle cx="120" cy="270" r="5"/>
+              <circle cx="200" cy="270" r="5"/>
+            </g>
+            <!-- origin node — your wallet -->
+            <circle cx="160" cy="140" r="10" fill="#F7931A" opacity=".9"/>
+            <circle cx="160" cy="140" r="14" fill="none" stroke="#F7931A" stroke-width="1" opacity=".4"/>
+            <text x="160" y="165" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="rgba(247,147,26,.7)" letter-spacing="1">YOUR TX</text>
+          </svg>
+        </div>
+        <div class="tx-box" style="margin-top:4px">
+          <div class="tx-row"><span>Nodes reached</span><span class="tx-val green">~15,000+</span></div>
+          <div class="tx-row"><span>Propagation time</span><span class="tx-val">&lt; 2 seconds</span></div>
+          <div class="tx-row"><span>Validation result</span><span class="tx-val green">Valid ✓</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STAGE 3: MEMPOOL ────────────────────────────── -->
+    <div class="stage-panel" id="stage-2">
+      <div class="stage-explain">
+        <span class="stage-number">Stage 03 — Mempool</span>
+        <h3 class="stage-title">Waiting<br>Room</h3>
+        <div class="stage-body">
+          <p>
+            The mempool (memory pool) is a holding area of validated
+            but unconfirmed transactions. Every node maintains its own
+            mempool. Your transaction waits here until a miner includes
+            it in a block.
+          </p>
+          <p>
+            Miners are economically rational. They sort the mempool by
+            <strong>fee rate (satoshis per virtual byte)</strong> and pick
+            the highest-paying transactions first. If the mempool is congested,
+            low-fee transactions can wait hours — or days.
+            If you're in a hurry, you pay more. If you can wait, you pay less.
+            <strong>The fee market is a pure auction.</strong>
+          </p>
+          <p>
+            One sat = <code>0.00000001 BTC</code> — the smallest unit.
+            A typical transaction is ~226 vbytes. At 10 sat/vbyte,
+            that's 2,260 sats ≈ a few dollars. At 100 sat/vbyte,
+            it's 10× that.
+          </p>
+          <div class="stage-key-fact">
+            Your tx: 13.3 sat/vbyte — competitive but not urgent.
+            Estimated wait: next 1–3 blocks (~10–30 min).
+          </div>
+        </div>
+      </div>
+      <div class="stage-visual">
+        <p class="visual-label">Mempool — sorted by fee rate</p>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:0 10px;font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px">
+            <span>TxID</span><span>Size</span><span>Fee rate</span>
+          </div>
+          <div class="mempool-row">
+            <span class="mp-txid">7f2a…b891</span>
+            <span class="mp-size">141 vb</span>
+            <span class="mp-fee high">89 s/vb</span>
+          </div>
+          <div class="mempool-row">
+            <span class="mp-txid">c3d9…0e44</span>
+            <span class="mp-size">520 vb</span>
+            <span class="mp-fee high">54 s/vb</span>
+          </div>
+          <div class="mempool-row">
+            <span class="mp-txid">9a1b…f230</span>
+            <span class="mp-size">189 vb</span>
+            <span class="mp-fee medium">28 s/vb</span>
+          </div>
+          <div class="mempool-row highlighted">
+            <span class="mp-txid" style="color:var(--btc)">a3f8…c9d2 ← yours</span>
+            <span class="mp-size" style="color:var(--btc)">226 vb</span>
+            <span class="mp-fee medium">13.3 s/vb</span>
+          </div>
+          <div class="mempool-row">
+            <span class="mp-txid">d7e5…3a19</span>
+            <span class="mp-size">340 vb</span>
+            <span class="mp-fee low">4 s/vb</span>
+          </div>
+          <div class="mempool-row">
+            <span class="mp-txid">1b8c…7f60</span>
+            <span class="mp-size">225 vb</span>
+            <span class="mp-fee low">2 s/vb</span>
+          </div>
+        </div>
+        <div class="tx-box" style="margin-top:8px">
+          <div class="tx-row"><span>Mempool size</span><span class="tx-val">~12,400 txs</span></div>
+          <div class="tx-row"><span>Your position</span><span class="tx-val orange">Top 30%</span></div>
+          <div class="tx-row"><span>Est. confirmation</span><span class="tx-val">1–3 blocks</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STAGE 4: MINING ─────────────────────────────── -->
+    <div class="stage-panel" id="stage-3">
+      <div class="stage-explain">
+        <span class="stage-number">Stage 04 — Mining</span>
+        <h3 class="stage-title">Proof<br>of Work</h3>
+        <div class="stage-body">
+          <p>
+            A miner assembles a <strong>candidate block</strong> — selecting
+            transactions from the mempool, adding a coinbase transaction
+            (their block reward + fees), and constructing a block header.
+          </p>
+          <p>
+            They then run SHA-256 hashing at enormous speed, incrementing
+            a <strong>nonce</strong> (a 32-bit number) billions of times per second,
+            searching for a hash output that starts with enough leading zeros
+            to satisfy the current <strong>difficulty target</strong>.
+            This cannot be faked or shortcut. It requires real energy.
+            That expenditure is the proof.
+          </p>
+          <p>
+            The <strong>difficulty adjusts every 2,016 blocks</strong> (~2 weeks)
+            to keep average block time at 10 minutes,
+            regardless of how much hashrate joins or leaves the network.
+            It is the most reliable clock in existence.
+          </p>
+          <div class="stage-key-fact">
+            Global hashrate: ~700 EH/s (700 × 10¹⁸ hashes/sec).
+            Odds of any single hash winning: 1 in ~10²²
+          </div>
+        </div>
+      </div>
+      <div class="stage-visual">
+        <p class="visual-label">Proof of work — live simulation</p>
+        <div class="nonce-counter">
+          <span class="nonce-label">Nonce</span>
+          <span class="nonce-value" id="nonce-display">0</span>
+          <span class="nonce-unit">attempts</span>
+        </div>
+        <div class="hash-display" id="hash-display">
+          <span class="hash-label">Current hash attempt</span>
+          <span id="hash-value" class="hash-invalid">f3a9…</span>
+        </div>
+        <div id="mining-status" class="tx-box">
+          <div class="tx-row"><span>Target (difficulty)</span><span class="tx-val addr">0000000000000…</span></div>
+          <div class="tx-row"><span>Status</span><span class="tx-val orange" id="mine-status-text">Mining…</span></div>
+        </div>
+        <div id="found-block" style="display:none">
+          <div class="block-visual">
+            <div class="block-header-bar">
+              <span class="bh-label">Block found ✓</span>
+              <span class="bh-num">#901,447</span>
+            </div>
+            <div class="block-tx-list">
+              <div class="block-tx-item">7f2a…b891 · 0.00890 BTC fee</div>
+              <div class="block-tx-item">c3d9…0e44 · 0.02808 BTC fee</div>
+              <div class="block-tx-item our-tx">a3f8…c9d2 · 0.00300 BTC ← yours</div>
+              <div class="block-tx-item">9a1b…f230 · 0.00530 BTC fee</div>
+              <div class="block-tx-item" style="color:var(--muted)">+ 2,841 more transactions</div>
+            </div>
+            <div class="block-footer">
+              <div class="bf-item"><span class="bf-label">Block reward</span><span class="bf-value">3.125 BTC</span></div>
+              <div class="bf-item"><span class="bf-label">Total fees</span><span class="bf-value">0.412 BTC</span></div>
+              <div class="bf-item"><span class="bf-label">Size</span><span class="bf-value">1.42 MB</span></div>
+              <div class="bf-item"><span class="bf-label">Time</span><span class="bf-value">9m 43s</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STAGE 5: CONFIRMED ──────────────────────────── -->
+    <div class="stage-panel" id="stage-4">
+      <div class="stage-explain">
+        <span class="stage-number">Stage 05 — Confirmed</span>
+        <h3 class="stage-title">Immutable.<br>Forever.</h3>
+        <div class="stage-body">
+          <p>
+            Your transaction is now in a block. That block is linked
+            cryptographically to every block before it — the hash of
+            the previous block is embedded in each new block header.
+            <strong>The chain is the ledger.</strong>
+          </p>
+          <p>
+            Each subsequent block mined on top adds another
+            <strong>confirmation</strong>. After 6 confirmations (~1 hour),
+            your transaction is considered irreversible in practice.
+            To reverse it, an attacker would need to redo all that
+            proof-of-work — and outpace the honest network doing it.
+            At Bitcoin's hashrate, that is computationally impossible.
+          </p>
+          <p>
+            The recipient's wallet now shows a new UTXO they control.
+            Your UTXO was consumed. The change UTXO is spendable by you.
+            <strong>No bank processed this. No company approved it.
+            No government can reverse it.</strong>
+          </p>
+          <div class="stage-key-fact">
+            This transaction is now part of a ledger that will exist
+            as long as a single node runs anywhere on earth.
+          </div>
+        </div>
+      </div>
+      <div class="stage-visual">
+        <p class="visual-label">Confirmation depth</p>
+        <div class="conf-meter" id="conf-meter">
+          <div class="conf-block-row">
+            <div class="conf-block-box confirmed">✓</div>
+            <span class="conf-block-text">Block <span class="conf-highlight">#901,447</span> — your transaction included</span>
+          </div>
+          <div class="conf-block-row" id="conf-2">
+            <div class="conf-block-box unconfirmed" id="conf-box-2">2</div>
+            <span class="conf-block-text" id="conf-text-2" style="color:var(--muted)">Block #901,448 — waiting…</span>
+          </div>
+          <div class="conf-block-row" id="conf-3">
+            <div class="conf-block-box unconfirmed" id="conf-box-3">3</div>
+            <span class="conf-block-text" id="conf-text-3" style="color:var(--muted)">Block #901,449 — waiting…</span>
+          </div>
+          <div class="conf-block-row" id="conf-4">
+            <div class="conf-block-box unconfirmed" id="conf-box-4">4</div>
+            <span class="conf-block-text" id="conf-text-4" style="color:var(--muted)">Block #901,450 — waiting…</span>
+          </div>
+          <div class="conf-block-row" id="conf-5">
+            <div class="conf-block-box unconfirmed" id="conf-box-5">5</div>
+            <span class="conf-block-text" id="conf-text-5" style="color:var(--muted)">Block #901,451 — waiting…</span>
+          </div>
+          <div class="conf-block-row" id="conf-6">
+            <div class="conf-block-box unconfirmed" id="conf-box-6">6</div>
+            <span class="conf-block-text" id="conf-text-6" style="color:var(--muted)">Block #901,452 — waiting…</span>
+          </div>
+        </div>
+        <div class="tx-box" style="margin-top:10px" id="final-status">
+          <div class="tx-row"><span>Confirmations</span><span class="tx-val orange" id="conf-count">1 / 6</span></div>
+          <div class="tx-row"><span>Status</span><span class="tx-val green" id="conf-status">Confirmed in chain ✓</span></div>
+          <div class="tx-row"><span>Reversible?</span><span class="tx-val" id="conf-reversible">Extremely unlikely</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end stage-display -->
+
+  <!-- PROGRESS DOTS -->
+  <div class="step-progress">
+    <button class="progress-dot active" onclick="goToStep(0)" aria-label="Go to step 1"></button>
+    <button class="progress-dot" onclick="goToStep(1)" aria-label="Go to step 2"></button>
+    <button class="progress-dot" onclick="goToStep(2)" aria-label="Go to step 3"></button>
+    <button class="progress-dot" onclick="goToStep(3)" aria-label="Go to step 4"></button>
+    <button class="progress-dot" onclick="goToStep(4)" aria-label="Go to step 5"></button>
   </div>
+
+  <!-- CONTROLS -->
+  <div class="stage-controls fade-in">
+    <button class="ctrl-btn" id="btn-prev" onclick="prevStep()" disabled>
+      <span class="arrow">←</span> Previous
+    </button>
+    <span class="stage-counter">Step <span id="current-step-num">1</span> of 5</span>
+    <button class="ctrl-btn" id="btn-next" onclick="nextStep()">
+      Next <span class="arrow">→</span>
+    </button>
+  </div>
+
 </section>
 
 
@@ -2233,6 +3062,111 @@ const timelineObserver = new IntersectionObserver(
 );
 requestAnimationFrame(() => {
   document.querySelectorAll('.timeline-section .fade-in').forEach(el => timelineObserver.observe(el));
+});
+</script>
+
+<script>
+/* ── Mechanics section ── */
+let currentStep = 0;
+const totalSteps = 5;
+
+let miningInterval = null;
+let nonce = 0;
+let miningDone = false;
+
+function randomHash() {
+  const chars = '0123456789abcdef';
+  let h = '';
+  for (let i = 0; i < 16; i++) h += chars[Math.floor(Math.random()*16)];
+  return h;
+}
+
+function startMining() {
+  if (miningDone) return;
+  nonce = 0;
+  miningInterval = setInterval(() => {
+    nonce += Math.floor(Math.random() * 4000000) + 1000000;
+    const hashEl   = document.getElementById('hash-value');
+    const nonceEl  = document.getElementById('nonce-display');
+    const statusEl = document.getElementById('mine-status-text');
+    if (nonceEl) nonceEl.textContent = nonce.toLocaleString();
+    if (nonce > 28000000 && !miningDone) {
+      miningDone = true;
+      clearInterval(miningInterval);
+      if (hashEl) { hashEl.className = 'hash-valid'; hashEl.textContent = '00000000000000003a9f…c1e8'; }
+      if (statusEl) statusEl.textContent = 'Block found! ✓';
+      const foundEl = document.getElementById('found-block');
+      const mineStatus = document.getElementById('mining-status');
+      if (foundEl) foundEl.style.display = 'block';
+      if (mineStatus) mineStatus.style.display = 'none';
+    } else if (hashEl) {
+      hashEl.className = 'hash-invalid';
+      hashEl.textContent = randomHash() + '…';
+    }
+  }, 120);
+}
+
+function stopMining() {
+  if (miningInterval) clearInterval(miningInterval);
+}
+
+let confInterval = null;
+let confCount = 1;
+
+function startConfirmations() {
+  confCount = 1;
+  confInterval = setInterval(() => {
+    confCount++;
+    if (confCount > 6) { clearInterval(confInterval); return; }
+    const box    = document.getElementById(`conf-box-${confCount}`);
+    const text   = document.getElementById(`conf-text-${confCount}`);
+    const countEl = document.getElementById('conf-count');
+    const revEl   = document.getElementById('conf-reversible');
+    if (box)  { box.className = 'conf-block-box confirmed'; box.textContent = '✓'; }
+    if (text) { text.style.color = 'var(--text)'; text.innerHTML = text.innerHTML.replace('waiting…', 'confirmed'); }
+    if (countEl) countEl.textContent = `${confCount} / 6`;
+    if (confCount >= 6 && revEl) { revEl.textContent = 'No ✓'; revEl.style.color = '#7bc67e'; }
+  }, 1400);
+}
+
+function stopConfirmations() {
+  if (confInterval) clearInterval(confInterval);
+}
+
+function goToStep(n) {
+  if (currentStep === 3) stopMining();
+  if (currentStep === 4) stopConfirmations();
+
+  document.getElementById(`stage-${currentStep}`).classList.remove('active');
+  document.querySelectorAll('.step-btn')[currentStep].classList.remove('active');
+  document.querySelectorAll('.progress-dot')[currentStep].classList.remove('active');
+
+  currentStep = n;
+
+  document.getElementById(`stage-${currentStep}`).classList.add('active');
+  document.querySelectorAll('.step-btn')[currentStep].classList.add('active');
+  document.querySelectorAll('.progress-dot')[currentStep].classList.add('active');
+
+  document.getElementById('current-step-num').textContent = currentStep + 1;
+  document.getElementById('btn-prev').disabled = currentStep === 0;
+  document.getElementById('btn-next').disabled = currentStep === totalSteps - 1;
+
+  if (currentStep === 3) { miningDone = false; startMining(); }
+  if (currentStep === 4) startConfirmations();
+}
+
+function nextStep() { if (currentStep < totalSteps - 1) goToStep(currentStep + 1); }
+function prevStep() { if (currentStep > 0) goToStep(currentStep - 1); }
+
+/* ── Mechanics scroll fade-ins ── */
+const mechanicsObserver = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); mechanicsObserver.unobserve(e.target); }
+  }),
+  { threshold: 0 }
+);
+requestAnimationFrame(() => {
+  document.querySelectorAll('.mechanics .fade-in').forEach(el => mechanicsObserver.observe(el));
 });
 </script>
 
