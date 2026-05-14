@@ -595,69 +595,6 @@ section { padding: clamp(64px,10vh,120px) 0; border-top: 1px solid var(--faint);
   .event.right .event-empty { display: none; }
 }
 
-/* ── TOKENOMICS ── */
-.supply-wrap {
-  background: var(--ink-2);
-  border: 1px solid var(--faint);
-  border-radius: 4px;
-  padding: 2rem;
-  margin: 1.5rem 0 2rem;
-}
-.supply-header {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 10px;
-  letter-spacing: .05em;
-}
-.supply-header span { color: var(--btc); }
-.supply-track {
-  height: 3px;
-  background: var(--faint);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 1rem;
-}
-.supply-fill {
-  height: 100%;
-  background: var(--btc);
-  border-radius: 2px;
-  width: 93.75%;
-}
-.supply-note {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: .03em;
-  line-height: 1.7;
-}
-
-.halving-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-mono);
-  font-size: 12px;
-}
-.halving-table th {
-  text-align: left;
-  font-weight: 500;
-  font-size: 10px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding: 0 1.5rem 0.75rem 0;
-  border-bottom: 1px solid var(--faint);
-}
-.halving-table td {
-  padding: 0.75rem 1.5rem 0.75rem 0;
-  border-bottom: 1px solid rgba(255,255,255,.05);
-  color: rgba(255,255,255,.45);
-}
-.halving-table .current td { color: var(--btc); }
-.halving-table tr:last-child td { border-bottom: none; }
-
 /* ── ACCORDION ── */
 .accordion { margin-top: 1rem; }
 .acc-item { border-bottom: 1px solid var(--faint); }
@@ -1832,6 +1769,320 @@ footer {
   @media (max-width: 768px) {
     .sidenav { display: none; }
   }
+
+/* ── TOKENOMICS SECTION ──────────────────────────────── */
+  .tokenomics {
+    position: relative;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+    overflow: hidden;
+  }
+
+  .tokenomics::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 47px,
+      var(--ruled) 47px, var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── INTRO ────────────────────────────────────────────── */
+  .tok-intro {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 4vw, 64px);
+    margin-bottom: clamp(56px, 7vw, 96px);
+    align-items: end;
+  }
+
+  .tok-intro-left h2 {
+    font-family: var(--font-disp);
+    font-size: clamp(52px, 7vw, 104px);
+    line-height: .92;
+    letter-spacing: .02em;
+    margin-bottom: 24px;
+  }
+
+  .tok-intro-left h2 span { color: var(--btc); display: block; }
+
+  .tok-intro-left p {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.5vw, 19px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.65);
+    max-width: 480px;
+  }
+
+  .tok-intro-left p strong { color: var(--text); font-weight: 400; }
+
+  /* live stat cards */
+  .tok-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--faint);
+    border: 1px solid var(--faint);
+    border-radius: 4px;
+    overflow: hidden;
+    align-self: start;
+  }
+
+  .tok-stat {
+    background: var(--ink-2);
+    padding: clamp(16px, 2vw, 24px);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: background .2s;
+  }
+  .tok-stat:hover { background: var(--ink-3); }
+  .tok-stat-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .tok-stat-value { font-family: var(--font-mono); font-size: clamp(16px, 1.8vw, 22px); font-weight: 500; color: var(--text); letter-spacing: .02em; }
+  .tok-stat-value.orange { color: var(--btc); }
+  .tok-stat-sub { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+
+  /* ── SUPPLY CURVE ─────────────────────────────────────── */
+  .chart-section {
+    position: relative; z-index: 1;
+    margin-bottom: clamp(56px, 7vw, 96px);
+  }
+
+  .chart-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .chart-title {
+    font-family: var(--font-disp);
+    font-size: clamp(28px, 3.5vw, 48px);
+    line-height: 1;
+    letter-spacing: .02em;
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .chart-wrap {
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    background: var(--ink-2);
+    padding: clamp(16px, 2vw, 28px);
+    overflow: hidden;
+  }
+
+  canvas#supply-chart {
+    width: 100%;
+    display: block;
+  }
+
+  .chart-note {
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .06em;
+    text-align: right;
+  }
+
+  /* ── HALVING TABLE ────────────────────────────────────── */
+  .halving-section {
+    position: relative; z-index: 1;
+    margin-bottom: clamp(56px, 7vw, 96px);
+  }
+
+  .halving-header { margin-bottom: 20px; }
+
+  .halving-title {
+    font-family: var(--font-disp);
+    font-size: clamp(28px, 3.5vw, 48px);
+    line-height: 1;
+    letter-spacing: .02em;
+    margin-bottom: 8px;
+  }
+
+  .halving-subtitle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+
+  .halving-table-wrap {
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  table.halving-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .halving-table thead th {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--ink-3);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 0.5px solid var(--faint);
+    white-space: nowrap;
+  }
+
+  .halving-table tbody tr {
+    border-bottom: 0.5px solid var(--faint2);
+    transition: background .15s;
+  }
+  .halving-table tbody tr:last-child { border-bottom: none; }
+  .halving-table tbody tr:hover { background: var(--ink-3); }
+
+  .halving-table tbody tr.current-epoch {
+    background: var(--btc-glow2);
+    border-color: var(--btc-dim);
+  }
+  .halving-table tbody tr.current-epoch td { color: var(--text); }
+  .halving-table tbody tr.current-epoch td.epoch-reward { color: var(--btc); }
+  .halving-table tbody tr.future-epoch td { color: var(--muted); }
+  .halving-table tbody tr.future-epoch td.epoch-reward { color: rgba(247,147,26,.4); }
+
+  .halving-table tbody td {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,.6);
+    padding: 12px 16px;
+    white-space: nowrap;
+  }
+
+  td.epoch-num    { color: var(--muted); font-size: 10px; }
+  td.epoch-block  { color: var(--text); }
+  td.epoch-reward { color: var(--btc); font-weight: 500; }
+  td.epoch-date   { color: rgba(255,255,255,.5); font-size: 10px; }
+  td.epoch-supply { color: rgba(255,255,255,.6); }
+
+  .epoch-badge {
+    display: inline-block;
+    font-size: 8px;
+    letter-spacing: .12em;
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .epoch-badge.now  { background: var(--btc-glow); border: 0.5px solid var(--btc-dim); color: var(--btc); }
+  .epoch-badge.done { background: var(--faint2); border: 0.5px solid var(--faint); color: var(--muted); }
+
+  /* ── THREE TRUTHS ─────────────────────────────────────── */
+  .truths {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(12px, 2vw, 24px);
+    margin-bottom: clamp(40px, 5vw, 72px);
+  }
+
+  .truth-card {
+    padding: clamp(20px, 2.5vw, 32px);
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    background: var(--ink-2);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color .2s, background .2s;
+  }
+  .truth-card:hover { border-color: var(--btc-dim); background: var(--ink-3); }
+
+  .truth-num {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--btc-dim);
+  }
+
+  .truth-title {
+    font-family: var(--font-disp);
+    font-size: clamp(22px, 2.5vw, 34px);
+    line-height: 1.05;
+    letter-spacing: .02em;
+  }
+
+  .truth-body {
+    font-family: var(--font-body);
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,.6);
+  }
+  .truth-body strong { color: var(--text); font-weight: 400; }
+
+  /* ── CLOSING STATEMENT ────────────────────────────────── */
+  .tok-close {
+    position: relative; z-index: 1;
+    padding: clamp(24px, 3vw, 40px);
+    border: 0.5px solid var(--btc-dim);
+    border-radius: 6px;
+    background: var(--btc-glow2);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .tok-close-rule { width: 32px; height: 1px; background: var(--btc); flex-shrink: 0; }
+
+  .tok-close-text {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.6vw, 20px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.65;
+    color: rgba(255,255,255,.75);
+  }
+  .tok-close-text strong { color: var(--text); font-weight: 400; font-style: normal; }
+
+  /* ── TOKENOMICS RESPONSIVE ────────────────────────────── */
+  @media (max-width: 768px) {
+    .tok-intro { grid-template-columns: 1fr; }
+    .truths { grid-template-columns: 1fr; }
+    .halving-table thead th:nth-child(4),
+    .halving-table tbody td:nth-child(4) { display: none; }
+  }
+  @media (max-width: 500px) {
+    .tok-stats { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -2969,41 +3220,157 @@ footer {
 <!-- ──────────────────────────────────────────
      5. TOKENOMICS
      ────────────────────────────────────────── -->
-<section id="tokenomics">
-  <div class="s-inner">
-    <p class="s-label reveal">// 004 &mdash; Supply</p>
-    <h2 class="s-heading reveal">21 Million.<br>Not One More.</h2>
+<section class="tokenomics" id="tokenomics">
 
-    <div class="supply-wrap reveal">
-      <div class="supply-header">
-        <span>~19.875M BTC mined</span>
-        <span>93.75% issued</span>
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">Tokenomics</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">05 / 09</span>
+  </div>
+
+  <!-- INTRO + LIVE STATS -->
+  <div class="tok-intro fade-in">
+    <div class="tok-intro-left">
+      <h2>21 Million.<br><span>Not one more.</span></h2>
+      <p>
+        Every monetary system in history has had someone with the power
+        to make more. Kings debased coins. Central banks print reserves.
+        <strong>Bitcoin has no such authority.</strong> The supply schedule
+        is written into the protocol. It cannot be changed by a vote,
+        a crisis, or a war. The scarcity is not a promise — it is code.
+      </p>
+    </div>
+    <div class="tok-stats" role="region" aria-label="Live Bitcoin supply stats">
+      <div class="tok-stat">
+        <span class="tok-stat-label">Hard cap</span>
+        <span class="tok-stat-value orange">21,000,000</span>
+        <span class="tok-stat-sub">BTC — absolute maximum</span>
       </div>
-      <div class="supply-track"><div class="supply-fill"></div></div>
-      <p class="supply-note">~1.125M BTC remain. Will be issued over the next ~120 years via halvings.<br>The last satoshi is mined around 2140.</p>
+      <div class="tok-stat">
+        <span class="tok-stat-label">Circulating supply</span>
+        <span class="tok-stat-value" id="tok-supply"><span class="shimmer"></span></span>
+        <span class="tok-stat-sub" id="tok-supply-sub">&nbsp;</span>
+      </div>
+      <div class="tok-stat">
+        <span class="tok-stat-label">Current block reward</span>
+        <span class="tok-stat-value orange">3.125 BTC</span>
+        <span class="tok-stat-sub">per block mined</span>
+      </div>
+      <div class="tok-stat">
+        <span class="tok-stat-label">Next halving</span>
+        <span class="tok-stat-value" id="tok-halving"><span class="shimmer"></span></span>
+        <span class="tok-stat-sub" id="tok-halving-sub">&nbsp;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPPLY EMISSION CURVE -->
+  <div class="chart-section fade-in">
+    <div class="chart-header">
+      <h3 class="chart-title">The Emission Curve</h3>
+      <div class="chart-legend">
+        <span class="legend-item">
+          <span class="legend-dot" style="background:var(--btc)"></span>
+          Cumulative supply
+        </span>
+        <span class="legend-item">
+          <span class="legend-dot" style="background:rgba(255,255,255,.3)"></span>
+          21M hard cap
+        </span>
+        <span class="legend-item">
+          <span class="legend-dot" style="background:#7bc67e;width:10px;height:2px;border-radius:0"></span>
+          We are here
+        </span>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="supply-chart" height="320"></canvas>
+    </div>
+    <p class="chart-note">
+      ~55% of all bitcoin that will ever exist were mined in the first 4 years. &nbsp;·&nbsp;
+      Last satoshi mined ~2140.
+    </p>
+  </div>
+
+  <!-- HALVING SCHEDULE TABLE -->
+  <div class="halving-section fade-in">
+    <div class="halving-header">
+      <h3 class="halving-title">The Halving Schedule</h3>
+      <p class="halving-subtitle">Every 210,000 blocks (~4 years), the block reward halves. This is not negotiable.</p>
+    </div>
+    <div class="halving-table-wrap">
+      <table class="halving-table" aria-label="Bitcoin halving schedule">
+        <thead>
+          <tr>
+            <th>Epoch</th>
+            <th>Block height</th>
+            <th>Reward</th>
+            <th>Approx. date</th>
+            <th>BTC issued (epoch)</th>
+            <th>Cumulative supply</th>
+          </tr>
+        </thead>
+        <tbody id="halving-tbody">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- THREE FUNDAMENTAL TRUTHS -->
+  <div class="truths">
+
+    <div class="truth-card fade-in">
+      <span class="truth-num">Truth 01</span>
+      <h4 class="truth-title">Predictable Issuance</h4>
+      <p class="truth-body">
+        Every bitcoin that will ever exist follows a schedule written
+        in 2008. On any given day you can calculate exactly how many
+        bitcoin exist, how many will be mined tomorrow, and the precise
+        block at which the last satoshi will be created.
+        <strong>No central bank in history has offered this.</strong>
+      </p>
     </div>
 
-    <table class="halving-table reveal">
-      <thead>
-        <tr>
-          <th>Epoch</th>
-          <th>Block</th>
-          <th>Year</th>
-          <th>Reward</th>
-          <th>Total Issued</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>1</td><td>0</td><td>2009</td><td>50 BTC</td><td>10,500,000</td></tr>
-        <tr><td>2</td><td>210,000</td><td>2012</td><td>25 BTC</td><td>15,750,000</td></tr>
-        <tr><td>3</td><td>420,000</td><td>2016</td><td>12.5 BTC</td><td>18,375,000</td></tr>
-        <tr><td>4</td><td>630,000</td><td>2020</td><td>6.25 BTC</td><td>19,687,500</td></tr>
-        <tr class="current"><td>5 &#8592;</td><td>840,000</td><td>2024</td><td>3.125 BTC</td><td>20,343,750</td></tr>
-        <tr><td>6</td><td>1,050,000</td><td>~2028</td><td>1.5625 BTC</td><td>20,671,875</td></tr>
-        <tr><td>7</td><td>1,260,000</td><td>~2032</td><td>0.78125 BTC</td><td>20,835,937</td></tr>
-      </tbody>
-    </table>
+    <div class="truth-card fade-in">
+      <span class="truth-num">Truth 02</span>
+      <h4 class="truth-title">Asymptotic Scarcity</h4>
+      <p class="truth-body">
+        The supply curve approaches 21 million but never reaches it
+        — the halving means each epoch issues half the previous.
+        This is not a marketing claim. It is the mathematical
+        property of a geometric series.
+        <strong>94% of all bitcoin will have been mined by 2024.</strong>
+        The remaining 6% takes over 100 years.
+      </p>
+    </div>
+
+    <div class="truth-card fade-in">
+      <span class="truth-num">Truth 03</span>
+      <h4 class="truth-title">The Fee Transition</h4>
+      <p class="truth-body">
+        As the block subsidy decays toward zero, miner revenue must
+        come increasingly from transaction fees. This is Bitcoin's
+        one open economic question — whether fee markets will
+        provide sufficient security budget at scale.
+        <strong>It is not a flaw. It is the honest design tension.</strong>
+      </p>
+    </div>
+
   </div>
+
+  <!-- CLOSING STATEMENT -->
+  <div class="tok-close fade-in">
+    <span class="tok-close-rule"></span>
+    <p class="tok-close-text">
+      Every fiat currency ever created has trended toward zero purchasing power.
+      <strong>Bitcoin is the first monetary asset with a mathematically enforced
+      ceiling.</strong> Whether that makes it sound money or a speculative asset
+      depends entirely on whether you trust the code or the committee.
+    </p>
+  </div>
+
 </section>
 
 
@@ -3347,6 +3714,219 @@ const mechanicsObserver = new IntersectionObserver(
 requestAnimationFrame(() => {
   document.querySelectorAll('.mechanics .fade-in').forEach(el => mechanicsObserver.observe(el));
 });
+</script>
+
+<script>
+/* ── Tokenomics section ── */
+(async () => {
+  const fmt   = (n, d=0) => n.toLocaleString('en-US', { maximumFractionDigits: d });
+  const setEl = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+
+  const HALVINGS = [
+    [0,  0,       2009, 50],
+    [1,  210000,  2012, 25],
+    [2,  420000,  2016, 12.5],
+    [3,  630000,  2020, 6.25],
+    [4,  840000,  2024, 3.125],
+    [5,  1050000, 2028, 1.5625],
+    [6,  1260000, 2032, 0.78125],
+    [7,  1470000, 2036, 0.390625],
+    [8,  1680000, 2040, 0.1953125],
+    [9,  1890000, 2044, 0.09765625],
+    [10, 2100000, 2048, 0.048828125],
+  ];
+
+  let cumulative = 0;
+  const halvingRows = HALVINGS.map(([epoch, block, year, reward]) => {
+    const issued  = 210000 * reward;
+    cumulative   += issued;
+    return { epoch, block, year, reward, issued, cumulative: Math.min(cumulative, 21000000) };
+  });
+
+  let currentHeight = null;
+  try {
+    const r = await fetch('https://mempool.space/api/blocks/tip/height');
+    if (r.ok) currentHeight = await r.json();
+  } catch {}
+
+  const currentEpoch     = currentHeight ? Math.floor(currentHeight / 210000) : 4;
+  const nextHalvingBlock = (currentEpoch + 1) * 210000;
+  const blocksToHalving  = currentHeight ? nextHalvingBlock - currentHeight : null;
+  const daysToHalving    = blocksToHalving ? Math.round(blocksToHalving * 10 / 1440) : null;
+
+  let supply = null;
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&community_data=false&developer_data=false');
+    if (r.ok) { const d = await r.json(); supply = d.market_data.circulating_supply; }
+  } catch {}
+
+  if (supply) {
+    const pct = ((supply / 21000000) * 100).toFixed(2);
+    setEl('tok-supply',     `${fmt(supply, 0)} BTC`);
+    setEl('tok-supply-sub', `${pct}% of 21M issued`);
+  } else {
+    setEl('tok-supply',     '≈ 19,700,000 BTC');
+    setEl('tok-supply-sub', '~93.8% issued');
+  }
+
+  if (blocksToHalving !== null) {
+    setEl('tok-halving',     `${fmt(blocksToHalving)} blocks`);
+    setEl('tok-halving-sub', `~${fmt(daysToHalving)} days away`);
+  } else {
+    setEl('tok-halving',     'Epoch 5');
+    setEl('tok-halving-sub', '~2028');
+  }
+
+  const tbody = document.getElementById('halving-tbody');
+  if (tbody) {
+    halvingRows.forEach(({ epoch, block, year, reward, issued, cumulative }) => {
+      const isPast    = epoch < currentEpoch;
+      const isCurrent = epoch === currentEpoch;
+      const isFuture  = epoch > currentEpoch;
+      const rowClass  = isCurrent ? 'current-epoch' : isFuture ? 'future-epoch' : '';
+      const badge     = isCurrent
+        ? '<span class="epoch-badge now">Now</span>'
+        : isPast ? '<span class="epoch-badge done">Done</span>' : '';
+      const rewardStr = reward >= 1 ? `${reward} BTC` : `${(reward * 100000000).toLocaleString()} sats`;
+      const issuedStr = `${fmt(issued, 0)} BTC`;
+      const cumStr    = epoch < 10 ? `${fmt(Math.min(cumulative, 21000000), 0)} BTC` : '21,000,000 BTC';
+      const dateStr   = isCurrent && currentHeight ? `~${year} (active)` : `~${year}`;
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr class="${rowClass}">
+          <td class="epoch-num">${epoch}${badge}</td>
+          <td class="epoch-block">${fmt(block)}</td>
+          <td class="epoch-reward">${rewardStr}</td>
+          <td class="epoch-date">${dateStr}</td>
+          <td class="epoch-supply">${issuedStr}</td>
+          <td class="epoch-supply">${cumStr}</td>
+        </tr>
+      `);
+    });
+  }
+
+  const canvas = document.getElementById('supply-chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function generateSupplyCurve() {
+    const points = [];
+    let btcMined = 0;
+    for (let epoch = 0; epoch < 33; epoch++) {
+      const reward    = 50 / Math.pow(2, epoch);
+      const startYear = 2009 + epoch * 4;
+      points.push({ year: startYear, supply: btcMined });
+      btcMined += 210000 * reward * 0.5;
+      points.push({ year: startYear + 2, supply: Math.min(btcMined, 21000000) });
+      btcMined += 210000 * reward * 0.5;
+      points.push({ year: startYear + 4, supply: Math.min(btcMined, 21000000) });
+      if (btcMined >= 20999999) break;
+    }
+    return points;
+  }
+
+  const supplyData    = generateSupplyCurve();
+  const years         = supplyData.map(p => p.year);
+  const supplies      = supplyData.map(p => p.supply);
+  const currentYear   = currentHeight ? 2009 + (currentHeight / 210000) * 4 : 2025;
+  const currentSupply = supply || 19700000;
+
+  function resizeCanvas() {
+    const dpr  = window.devicePixelRatio || 1;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width       = rect.width * dpr;
+    canvas.height      = 320 * dpr;
+    canvas.style.height = '320px';
+    ctx.scale(dpr, dpr);
+    drawChart(rect.width, 320);
+  }
+
+  function drawChart(W, H) {
+    ctx.clearRect(0, 0, W, H);
+    const pad = { top: 20, right: 24, bottom: 40, left: 56 };
+    const cW  = W - pad.left - pad.right;
+    const cH  = H - pad.top  - pad.bottom;
+    const minYear = 2009, maxYear = 2144, maxSupply = 21000000;
+    const xScale = yr => pad.left + ((yr - minYear) / (maxYear - minYear)) * cW;
+    const yScale = s  => pad.top  + cH - (s / maxSupply) * cH;
+
+    ctx.strokeStyle = 'rgba(255,255,255,.05)';
+    ctx.lineWidth   = 1;
+    [0, 5250000, 10500000, 15750000, 21000000].forEach(s => {
+      ctx.beginPath(); ctx.moveTo(pad.left, yScale(s)); ctx.lineTo(pad.left + cW, yScale(s)); ctx.stroke();
+    });
+
+    ctx.fillStyle = 'rgba(255,255,255,.3)';
+    ctx.font = '9px IBM Plex Mono';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    [[0,'0'],[5250000,'5.25M'],[10500000,'10.5M'],[15750000,'15.75M'],[21000000,'21M']].forEach(([s, label]) => {
+      ctx.fillText(label, pad.left - 8, yScale(s));
+    });
+
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    [2009, 2024, 2040, 2060, 2080, 2100, 2140].forEach(yr => {
+      ctx.fillText(yr, xScale(yr), pad.top + cH + 10);
+    });
+
+    ctx.strokeStyle = 'rgba(247,147,26,.15)';
+    ctx.lineWidth   = 1;
+    ctx.setLineDash([3, 4]);
+    for (let e = 1; e <= 10; e++) {
+      const x = xScale(2009 + e * 4);
+      ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top + cH); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle = 'rgba(255,255,255,.2)';
+    ctx.lineWidth   = 1;
+    ctx.setLineDash([4, 6]);
+    ctx.beginPath();
+    ctx.moveTo(pad.left, yScale(21000000)); ctx.lineTo(pad.left + cW, yScale(21000000));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + cH);
+    grad.addColorStop(0,   'rgba(247,147,26,.25)');
+    grad.addColorStop(0.6, 'rgba(247,147,26,.08)');
+    grad.addColorStop(1,   'rgba(247,147,26,.02)');
+    ctx.beginPath();
+    ctx.moveTo(xScale(years[0]), yScale(supplies[0]));
+    for (let i = 1; i < years.length; i++) ctx.lineTo(xScale(years[i]), yScale(supplies[i]));
+    ctx.lineTo(xScale(years[years.length - 1]), pad.top + cH);
+    ctx.lineTo(xScale(years[0]), pad.top + cH);
+    ctx.closePath();
+    ctx.fillStyle = grad; ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(xScale(years[0]), yScale(supplies[0]));
+    for (let i = 1; i < years.length; i++) ctx.lineTo(xScale(years[i]), yScale(supplies[i]));
+    ctx.strokeStyle = '#F7931A'; ctx.lineWidth = 2; ctx.stroke();
+
+    const nowX = xScale(currentYear);
+    const nowY = yScale(currentSupply);
+    ctx.strokeStyle = 'rgba(123,198,126,.6)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(nowX, pad.top); ctx.lineTo(nowX, pad.top + cH); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(nowX, nowY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#7bc67e'; ctx.fill();
+    ctx.strokeStyle = '#0a0a0a'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#7bc67e'; ctx.font = '9px IBM Plex Mono';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('← now', nowX + 8, nowY + 4);
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const tokenomicsObserver = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); tokenomicsObserver.unobserve(e.target); }
+    }),
+    { threshold: 0 }
+  );
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.tokenomics .fade-in').forEach(el => tokenomicsObserver.observe(el));
+  });
+})();
 </script>
 
 
