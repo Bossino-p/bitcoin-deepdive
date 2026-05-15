@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 6 — Upgrades & Terms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --btc:       #F7931A;
+    --btc-dim:   #a85e08;
+    --btc-glow:  rgba(247,147,26,.18);
+    --btc-glow2: rgba(247,147,26,.06);
+    --ink:       #0a0a0a;
+    --ink-2:     #111111;
+    --ink-3:     #1a1a1a;
+    --ruled:     rgba(255,255,255,.045);
+    --muted:     rgba(255,255,255,.38);
+    --faint:     rgba(255,255,255,.12);
+    --faint2:    rgba(255,255,255,.06);
+    --text:      rgba(255,255,255,.92);
+    --font-disp: 'Bebas Neue', sans-serif;
+    --font-body: 'Newsreader', serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SECTION WRAPPER ──────────────────────────────────── */
+  .upgrades {
+    position: relative;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+    overflow: hidden;
+  }
+
+  .upgrades::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 47px,
+      var(--ruled) 47px, var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── SECTION LABEL ────────────────────────────────────── */
+  .section-label {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: clamp(48px, 6vw, 80px);
+  }
+  .section-label-text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--btc); }
+  .section-label-line { flex: 1; height: 1px; background: var(--faint); max-width: 120px; }
+  .section-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+
+  /* ── INTRO ────────────────────────────────────────────── */
+  .upgrades-intro {
+    position: relative; z-index: 1;
+    max-width: 640px;
+    margin-bottom: clamp(48px, 6vw, 72px);
+  }
+
+  .upgrades-intro h2 {
+    font-family: var(--font-disp);
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: .95;
+    letter-spacing: .02em;
+    margin-bottom: 20px;
+  }
+
+  .upgrades-intro h2 span { color: var(--btc); }
+
+  .upgrades-intro p {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.5vw, 19px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.65);
+  }
+  .upgrades-intro p strong { color: var(--text); font-weight: 400; }
+
+  /* ── TIER LABEL ───────────────────────────────────────── */
+  .tier-label {
+    position: relative; z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+
+  .tier-label:first-of-type { margin-top: 0; }
+
+  .tier-name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .tier-line {
+    flex: 1;
+    height: 1px;
+    background: var(--faint2);
+  }
+
+  /* ── ACCORDION GRID ───────────────────────────────────── */
+  .accordion-grid {
+    position: relative; z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* ── ACCORDION ITEM ───────────────────────────────────── */
+  .acc-item {
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+
+  .acc-item:hover { border-color: rgba(255,255,255,.2); }
+  .acc-item.open  { border-color: var(--btc-dim); }
+
+  /* ── ACCORDION TRIGGER ────────────────────────────────── */
+  .acc-trigger {
+    width: 100%;
+    background: var(--ink-2);
+    border: none;
+    cursor: pointer;
+    padding: clamp(16px, 2vw, 22px) clamp(18px, 2.5vw, 28px);
+    display: grid;
+    grid-template-columns: 48px 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    transition: background .2s;
+  }
+
+  .acc-item.open .acc-trigger { background: var(--btc-glow2); }
+  .acc-trigger:hover { background: var(--ink-3); }
+  .acc-item.open .acc-trigger:hover { background: var(--btc-glow2); }
+
+  .acc-icon {
+    width: 36px; height: 36px;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: var(--faint2);
+    border: 0.5px solid var(--faint);
+    transition: background .2s, border-color .2s;
+  }
+
+  .acc-item.open .acc-icon {
+    background: var(--btc-glow);
+    border-color: var(--btc-dim);
+  }
+
+  .acc-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .acc-title {
+    font-family: var(--font-disp);
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1;
+    letter-spacing: .02em;
+    color: var(--text);
+  }
+
+  .acc-subtitle {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .acc-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 0.5px solid var(--faint);
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .acc-item.open .acc-tag {
+    border-color: var(--btc-dim);
+    color: var(--btc);
+    background: var(--btc-glow2);
+  }
+
+  .acc-chevron {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    color: var(--muted);
+    transition: transform .25s ease, color .2s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .acc-item.open .acc-chevron {
+    transform: rotate(180deg);
+    color: var(--btc);
+  }
+
+  /* ── ACCORDION PANEL ──────────────────────────────────── */
+  .acc-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .4s cubic-bezier(.4,0,.2,1);
+  }
+
+  .acc-item.open .acc-panel {
+    max-height: 800px;
+  }
+
+  .acc-panel-inner {
+    padding: clamp(20px, 2.5vw, 32px) clamp(18px, 2.5vw, 28px) clamp(20px, 2.5vw, 32px) calc(48px + 16px + clamp(18px, 2.5vw, 28px));
+    border-top: 0.5px solid var(--faint);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 40px);
+    background: var(--ink-2);
+  }
+
+  /* full-width panel for simpler terms */
+  .acc-panel-inner.single-col {
+    grid-template-columns: 1fr;
+    max-width: 680px;
+  }
+
+  .panel-explain {}
+
+  .panel-plain {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.3vw, 17px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 16px;
+  }
+
+  .panel-plain p + p { margin-top: 14px; }
+  .panel-plain strong { color: var(--text); font-weight: 400; }
+  .panel-plain em     { font-style: italic; color: rgba(255,255,255,.45); }
+  .panel-plain code {
+    font-family: var(--font-mono);
+    font-size: .85em;
+    color: var(--btc);
+    background: var(--btc-glow2);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  .panel-why {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-left: 2px solid var(--btc);
+    background: var(--btc-glow2);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .panel-why-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--btc-dim);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .panel-why-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .04em;
+    color: rgba(255,255,255,.65);
+    line-height: 1.7;
+  }
+
+  /* visual/data panel — right column */
+  .panel-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .visual-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* data rows */
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 12px;
+    background: var(--ink-3);
+    border: 0.5px solid var(--faint2);
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .data-row .dr-key { color: var(--muted); font-size: 10px; }
+  .data-row .dr-val { color: var(--text); }
+  .data-row .dr-val.orange { color: var(--btc); }
+  .data-row .dr-val.green  { color: #7bc67e; }
+
+  /* comparison bar */
+  .comp-bar-wrap { margin-top: 4px; }
+  .comp-bar-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .comp-bar-track {
+    height: 6px;
+    background: var(--faint2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .comp-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+  .comp-bar-fill.orange { background: var(--btc); }
+  .comp-bar-fill.dim    { background: rgba(255,255,255,.15); }
+  .comp-bar-fill.green  { background: #7bc67e; }
+
+  /* ── FADE IN ──────────────────────────────────────────── */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ───────────────────────────────────────── */
+  @media (max-width: 700px) {
+    .acc-panel-inner { grid-template-columns: 1fr; }
+    .acc-trigger { grid-template-columns: 40px 1fr auto; }
+    .acc-tag { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="upgrades" id="upgrades">
+
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">Upgrades & Terms</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">06 / 09</span>
+  </div>
+
+  <!-- INTRO -->
+  <div class="upgrades-intro fade-in">
+    <h2>The language<br>of <span>Bitcoin</span></h2>
+    <p>
+      Bitcoin's base protocol is intentionally conservative — it changes
+      rarely and only when the change is overwhelmingly adopted by the
+      network. <strong>Each upgrade below earned its place</strong> through
+      years of review, debate, and consensus. The terms below are the
+      vocabulary every bitcoiner eventually learns.
+    </p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TIER 1 — PROTOCOL UPGRADES
+       ══════════════════════════════════════════════════════ -->
+  <div class="tier-label fade-in">
+    <span class="tier-name">Protocol upgrades</span>
+    <span class="tier-line"></span>
+  </div>
+
+  <div class="accordion-grid fade-in">
+
+    <!-- ── SEGWIT ──────────────────────────────────────── -->
+    <div class="acc-item" id="acc-segwit">
+      <button class="acc-trigger" onclick="toggleAcc('acc-segwit')" aria-expanded="false">
+        <span class="acc-icon">⚡</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">SegWit</span>
+          <span class="acc-subtitle">Segregated Witness — activated Aug 2017</span>
+        </div>
+        <span class="acc-tag">Soft fork</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                Segregated Witness separated the <strong>signature data
+                (witness)</strong> from the transaction data and moved it
+                to a separate part of the block. This solved a long-standing
+                bug called <em>transaction malleability</em> — where a
+                third party could alter a transaction's ID without
+                invalidating it, which had blocked Lightning Network development.
+              </p>
+              <p>
+                SegWit also introduced <strong>virtual bytes (vbytes)</strong>
+                as a weight measurement, giving witness data a 75% discount.
+                This effectively increased block capacity from 1MB to ~1.7MB
+                in practice — without changing the 1MB base block size limit
+                that was at the heart of the block size wars.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                SegWit was the prerequisite for Lightning Network. Without it,
+                payment channels couldn't be built safely. It also made
+                transactions cheaper and faster — and it did it as a soft
+                fork, meaning old nodes still validated new blocks.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">Before vs After</span>
+            <div class="comp-bar-wrap">
+              <div class="comp-bar-label"><span>Legacy tx (1MB limit)</span><span>~1,700 tx/block</span></div>
+              <div class="comp-bar-track"><div class="comp-bar-fill dim" style="width:60%"></div></div>
+              <div class="comp-bar-label"><span>SegWit tx (effective ~1.7MB)</span><span>~2,800 tx/block</span></div>
+              <div class="comp-bar-track"><div class="comp-bar-fill orange" style="width:100%"></div></div>
+            </div>
+            <div class="data-row"><span class="dr-key">Activation</span><span class="dr-val">Block 481,824</span></div>
+            <div class="data-row"><span class="dr-key">Upgrade type</span><span class="dr-val green">Soft fork</span></div>
+            <div class="data-row"><span class="dr-key">Fee savings</span><span class="dr-val orange">~40% cheaper</span></div>
+            <div class="data-row"><span class="dr-key">Enabled</span><span class="dr-val">Lightning Network</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAPROOT ─────────────────────────────────────── -->
+    <div class="acc-item" id="acc-taproot">
+      <button class="acc-trigger" onclick="toggleAcc('acc-taproot')" aria-expanded="false">
+        <span class="acc-icon">🌿</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">Taproot</span>
+          <span class="acc-subtitle">Bitcoin's most significant upgrade since SegWit — Nov 2021</span>
+        </div>
+        <span class="acc-tag">Soft fork</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                Taproot bundled three improvements: <strong>Schnorr signatures,
+                MAST (Merkelised Abstract Syntax Trees), and Tapscript.</strong>
+                Together they make complex transactions — multi-signature wallets,
+                Lightning channel opens, smart contracts — look identical to
+                simple single-signature transactions on the blockchain.
+              </p>
+              <p>
+                This has two profound effects. First, <strong>privacy</strong>:
+                a 2-of-3 multisig spend is now indistinguishable from a regular
+                payment to any outside observer. Second, <strong>efficiency</strong>:
+                only the executed spending condition needs to be revealed —
+                all unused conditions remain hidden, saving block space.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                Taproot makes Bitcoin smarter without making it complex.
+                It unlocks better multi-sig, more private Lightning channels,
+                and lays the groundwork for more sophisticated smart contracts —
+                all while keeping the base layer simple and auditable.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">Key properties</span>
+            <div class="data-row"><span class="dr-key">Activation</span><span class="dr-val">Block 709,632</span></div>
+            <div class="data-row"><span class="dr-key">Upgrade type</span><span class="dr-val green">Soft fork</span></div>
+            <div class="data-row"><span class="dr-key">Signature scheme</span><span class="dr-val orange">Schnorr</span></div>
+            <div class="data-row"><span class="dr-key">Privacy gain</span><span class="dr-val green">Complex = simple</span></div>
+            <div class="data-row"><span class="dr-key">Adoption (2025)</span><span class="dr-val">~65% of outputs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCHNORR ─────────────────────────────────────── -->
+    <div class="acc-item" id="acc-schnorr">
+      <button class="acc-trigger" onclick="toggleAcc('acc-schnorr')" aria-expanded="false">
+        <span class="acc-icon">✍️</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">Schnorr Signatures</span>
+          <span class="acc-subtitle">Replacing ECDSA — shipped with Taproot</span>
+        </div>
+        <span class="acc-tag">Cryptography</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                Bitcoin originally used <strong>ECDSA</strong> (Elliptic Curve Digital
+                Signature Algorithm) to sign transactions. Taproot replaced this with
+                <strong>Schnorr signatures</strong> — a mathematically simpler scheme
+                with a crucial additional property: <em>linearity</em>.
+              </p>
+              <p>
+                Linearity means multiple signatures can be <strong>aggregated into
+                one</strong>. In a 3-of-5 multisig wallet, instead of publishing
+                three separate signatures (each taking block space), you publish
+                a single aggregated signature that's the same size as a single-sig
+                transaction. This is called <strong>MuSig</strong>.
+              </p>
+              <p>
+                Schnorr also has a simpler security proof than ECDSA, reducing
+                cryptographic attack surface.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                Signature aggregation means multi-sig wallets are cheaper,
+                faster, and indistinguishable from single-sig. It's a compounding
+                win: more privacy + lower fees + quantum-resistance groundwork.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">ECDSA vs Schnorr</span>
+            <div class="comp-bar-wrap">
+              <div class="comp-bar-label"><span>3-of-5 ECDSA (3 sigs)</span><span>~450 bytes</span></div>
+              <div class="comp-bar-track"><div class="comp-bar-fill dim" style="width:90%"></div></div>
+              <div class="comp-bar-label"><span>3-of-5 Schnorr MuSig (1 sig)</span><span>~64 bytes</span></div>
+              <div class="comp-bar-track"><div class="comp-bar-fill green" style="width:13%"></div></div>
+            </div>
+            <div class="data-row"><span class="dr-key">Sig size (single)</span><span class="dr-val">64 bytes</span></div>
+            <div class="data-row"><span class="dr-key">Aggregation</span><span class="dr-val green">MuSig ✓</span></div>
+            <div class="data-row"><span class="dr-key">Security proof</span><span class="dr-val orange">Simpler than ECDSA</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LIGHTNING NETWORK ───────────────────────────── -->
+    <div class="acc-item" id="acc-lightning">
+      <button class="acc-trigger" onclick="toggleAcc('acc-lightning')" aria-expanded="false">
+        <span class="acc-icon">⚡</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">Lightning Network</span>
+          <span class="acc-subtitle">Bitcoin's Layer 2 payment layer</span>
+        </div>
+        <span class="acc-tag">Layer 2</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                The base Bitcoin layer processes ~7 transactions per second.
+                Visa does ~24,000. Lightning solves this by moving most
+                transactions <strong>off-chain into payment channels.</strong>
+              </p>
+              <p>
+                Two parties open a channel by locking bitcoin in a
+                multisig address on-chain. They can then send unlimited
+                transactions between each other <strong>instantly, for
+                near-zero fees</strong>, without touching the blockchain.
+                When they're done, they settle the final balance on-chain
+                with a single closing transaction.
+              </p>
+              <p>
+                Channels form a network — you don't need a direct channel
+                with everyone. Payments route through intermediate nodes,
+                like internet packets routing through servers, with each
+                hop taking a tiny fee.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                Lightning makes Bitcoin usable for everyday payments —
+                coffee, remittances, micropayments. It settles in milliseconds.
+                It doesn't require trust in a third party.
+                El Salvador's Chivo wallet runs on Lightning.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">Network stats (~2025)</span>
+            <div class="data-row"><span class="dr-key">Public channels</span><span class="dr-val">~50,000+</span></div>
+            <div class="data-row"><span class="dr-key">Network capacity</span><span class="dr-val orange">~5,000 BTC</span></div>
+            <div class="data-row"><span class="dr-key">Avg settlement</span><span class="dr-val green">&lt; 1 second</span></div>
+            <div class="data-row"><span class="dr-key">Avg fee</span><span class="dr-val">&lt; 1 sat</span></div>
+            <div class="data-row"><span class="dr-key">Base layer txs saved</span><span class="dr-val orange">Billions</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ORDINALS ────────────────────────────────────── -->
+    <div class="acc-item" id="acc-ordinals">
+      <button class="acc-trigger" onclick="toggleAcc('acc-ordinals')" aria-expanded="false">
+        <span class="acc-icon">🔢</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">Ordinals</span>
+          <span class="acc-subtitle">Bitcoin inscriptions — launched Jan 2023</span>
+        </div>
+        <span class="acc-tag">Controversial</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                Ordinals assign a <strong>serial number to every satoshi</strong>
+                based on the order it was mined. This lets individual sats be
+                tracked and treated as unique. Using Taproot's expanded witness
+                data capacity, arbitrary data — images, text, code — can be
+                <strong>inscribed directly onto individual satoshis</strong>
+                and stored permanently on the Bitcoin blockchain.
+              </p>
+              <p>
+                This created Bitcoin's first NFT-like ecosystem and sparked
+                fierce debate. Critics argue inscriptions waste block space,
+                drive up fees for regular users, and pollute the monetary
+                network with jpegs. Supporters argue <em>any legal use of
+                block space is valid</em> — the fee market decides,
+                not a committee.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                Ordinals revealed that Bitcoin's base layer is more
+                expressive than most assumed — and intensified the fee
+                market debate. Whether you think it's noise or signal,
+                it proved Bitcoin can't be stopped from being used in
+                ways its community disagrees with. That cuts both ways.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">Impact snapshot</span>
+            <div class="data-row"><span class="dr-key">Inscriptions (2023–24)</span><span class="dr-val">70M+</span></div>
+            <div class="data-row"><span class="dr-key">Fee impact (peak)</span><span class="dr-val orange">~80% of block fees</span></div>
+            <div class="data-row"><span class="dr-key">Community verdict</span><span class="dr-val" style="color:#e87070">Contested</span></div>
+            <div class="data-row"><span class="dr-key">Protocol change needed</span><span class="dr-val green">None — used Taproot</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tier 1 accordion -->
+
+  <!-- ══════════════════════════════════════════════════════
+       TIER 2 — FOUNDATIONAL CONCEPTS
+       ══════════════════════════════════════════════════════ -->
+  <div class="tier-label fade-in">
+    <span class="tier-name">Foundational concepts</span>
+    <span class="tier-line"></span>
+  </div>
+
+  <div class="accordion-grid fade-in">
+
+    <!-- ── HASH RATE ───────────────────────────────────── -->
+    <div class="acc-item" id="acc-hashrate">
+      <button class="acc-trigger" onclick="toggleAcc('acc-hashrate')" aria-expanded="false">
+        <span class="acc-icon">🔥</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">Hash Rate</span>
+          <span class="acc-subtitle">The security meter of the Bitcoin network</span>
+        </div>
+        <span class="acc-tag">Core concept</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                Hash rate is the total number of SHA-256 hash computations
+                the Bitcoin network performs every second. It is the aggregate
+                of every ASIC miner running worldwide.
+                <strong>Higher hash rate = more computational work required
+                to attack the network.</strong>
+              </p>
+              <p>
+                A 51% attacker would need to match the honest network's
+                hash rate — currently around <code>~700 EH/s</code>
+                (700 × 10¹⁸ hashes per second). At current hardware
+                efficiency, that would require billions in ASICs and
+                electricity, consumed faster than you could recoup it.
+              </p>
+              <p>
+                When China banned mining in 2021 and ~65% of hash rate
+                went offline, the network kept producing blocks.
+                The <strong>difficulty adjustment</strong> recalibrated within
+                two weeks. Hash rate fully recovered within six months.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                Hash rate is the most honest measure of Bitcoin's security.
+                It can't be faked, inflated, or politicked.
+                It represents real energy expenditure by real economic actors
+                who believe the network is worth protecting.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">Hash rate context</span>
+            <div class="data-row"><span class="dr-key">Current (~2025)</span><span class="dr-val orange">~700 EH/s</span></div>
+            <div class="data-row"><span class="dr-key">At genesis (2009)</span><span class="dr-val">~0.000007 EH/s</span></div>
+            <div class="data-row"><span class="dr-key">Growth factor</span><span class="dr-val orange">~10¹⁴×</span></div>
+            <div class="data-row"><span class="dr-key">51% attack cost/hr</span><span class="dr-val" style="color:#e87070">~$2B+</span></div>
+            <div class="data-row"><span class="dr-key">Post-China recovery</span><span class="dr-val green">6 months ✓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── UTXO ────────────────────────────────────────── -->
+    <div class="acc-item" id="acc-utxo">
+      <button class="acc-trigger" onclick="toggleAcc('acc-utxo')" aria-expanded="false">
+        <span class="acc-icon">🪙</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">UTXO</span>
+          <span class="acc-subtitle">Unspent Transaction Output — how Bitcoin tracks ownership</span>
+        </div>
+        <span class="acc-tag">Core concept</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                Bitcoin doesn't store balances. It stores a set of
+                <strong>unspent transaction outputs</strong> — discrete
+                chunks of bitcoin locked to specific addresses.
+                Your "balance" is just the sum of UTXOs your keys control.
+              </p>
+              <p>
+                Think of UTXOs like physical banknotes of irregular denomination.
+                If you have a 0.5 BTC UTXO and want to pay 0.2 BTC,
+                you spend the entire UTXO as input and create two new outputs:
+                <code>0.2 BTC</code> to the recipient and
+                <code>~0.297 BTC</code> back to yourself as change
+                (minus the miner fee). The original UTXO is destroyed.
+                Two new UTXOs are born.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                The UTXO model makes Bitcoin's ledger stateless and
+                parallelisable — each UTXO can be verified independently.
+                It also makes double-spend prevention explicit:
+                a UTXO is either unspent or it isn't.
+                There's no ambiguous in-between.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">UTXO lifecycle</span>
+            <div class="data-row"><span class="dr-key">Created by</span><span class="dr-val">Transaction output</span></div>
+            <div class="data-row"><span class="dr-key">Destroyed by</span><span class="dr-val">Transaction input</span></div>
+            <div class="data-row"><span class="dr-key">Current UTXO set</span><span class="dr-val orange">~180M UTXOs</span></div>
+            <div class="data-row"><span class="dr-key">Smallest unit</span><span class="dr-val">1 satoshi</span></div>
+            <div class="data-row"><span class="dr-key">Model type</span><span class="dr-val green">Stateless ✓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SATS ────────────────────────────────────────── -->
+    <div class="acc-item" id="acc-sats">
+      <button class="acc-trigger" onclick="toggleAcc('acc-sats')" aria-expanded="false">
+        <span class="acc-icon">⚡</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">Sats</span>
+          <span class="acc-subtitle">Satoshis — the base unit of Bitcoin</span>
+        </div>
+        <span class="acc-tag">Core concept</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner single-col">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                1 Bitcoin = <strong>100,000,000 satoshis</strong> (sats).
+                Named after Satoshi Nakamoto, a sat is the smallest
+                indivisible unit of bitcoin — <code>0.00000001 BTC</code>.
+                You don't need to buy a whole bitcoin.
+                At $60,000 per BTC, one dollar buys roughly
+                <strong>1,667 sats</strong>.
+              </p>
+              <p>
+                The "stack sats" culture among bitcoiners is deliberate:
+                framing accumulation in sats rather than dollars reorients
+                thinking away from fiat price and toward
+                <strong>how much of the fixed supply you control.</strong>
+                There are only 2.1 quadrillion sats ever. Every sat
+                you hold is a fixed fraction of the total.
+              </p>
+              <p>
+                Lightning Network transactions are denominated in
+                <strong>millisatoshis</strong> (msats) —
+                1/1000th of a sat — for routing fee precision.
+                These never touch the base chain.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                Thinking in sats reframes Bitcoin's value proposition.
+                You're not buying a fraction of an expensive coin.
+                You're acquiring a measurable, permanent share
+                of the only provably scarce digital asset.
+                Stack accordingly.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NODES & KEYS ────────────────────────────────── -->
+    <div class="acc-item" id="acc-nodes">
+      <button class="acc-trigger" onclick="toggleAcc('acc-nodes')" aria-expanded="false">
+        <span class="acc-icon">🖧</span>
+        <div class="acc-title-wrap">
+          <span class="acc-title">Nodes & Keys</span>
+          <span class="acc-subtitle">The infrastructure of sovereignty</span>
+        </div>
+        <span class="acc-tag">Core concept</span>
+        <span class="acc-chevron">⌄</span>
+      </button>
+      <div class="acc-panel" role="region">
+        <div class="acc-panel-inner">
+          <div class="panel-explain">
+            <div class="panel-plain">
+              <p>
+                A <strong>full node</strong> downloads the entire blockchain
+                and independently validates every transaction and block
+                against Bitcoin's rules. No trust required. Your node
+                is your vote — it enforces which rules it accepts.
+                <strong>This is why the block size wars ended the way they did:</strong>
+                users running nodes rejected the large-block fork.
+              </p>
+              <p>
+                A <strong>private key</strong> is a 256-bit random number.
+                From it, a public key is derived (elliptic curve math).
+                From the public key, a Bitcoin address is derived (hashing).
+                The private key signs transactions. <strong>"Not your keys,
+                not your coins"</strong> — if an exchange holds your keys,
+                they hold your bitcoin. Mt. Gox is the lesson.
+              </p>
+            </div>
+            <div class="panel-why">
+              <span class="panel-why-label">Why it matters</span>
+              <span class="panel-why-text">
+                Running a node + self-custody is the full expression of
+                Bitcoin's value proposition. Everything else is trust —
+                and trust is what Bitcoin was built to eliminate.
+                A hardware wallet and a Raspberry Pi node
+                cost less than one month of bank fees.
+              </span>
+            </div>
+          </div>
+          <div class="panel-visual">
+            <span class="visual-label">Key hierarchy</span>
+            <div class="data-row"><span class="dr-key">Private key</span><span class="dr-val">256-bit secret</span></div>
+            <div class="data-row"><span class="dr-key">Public key</span><span class="dr-val">Derived (EC math)</span></div>
+            <div class="data-row"><span class="dr-key">Address</span><span class="dr-val">Hashed public key</span></div>
+            <div class="data-row"><span class="dr-key">Reachable full nodes</span><span class="dr-val orange">~15,000+</span></div>
+            <div class="data-row"><span class="dr-key">Custody rule</span><span class="dr-val green">Your keys = your BTC</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tier 2 accordion -->
+
+</section>
+
+<script>
+  function toggleAcc(id) {
+    const item    = document.getElementById(id);
+    const btn     = item.querySelector('.acc-trigger');
+    const isOpen  = item.classList.contains('open');
+
+    // close all others in the same grid
+    const grid = item.closest('.accordion-grid');
+    grid.querySelectorAll('.acc-item.open').forEach(el => {
+      if (el !== item) {
+        el.classList.remove('open');
+        el.querySelector('.acc-trigger').setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    item.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  // scroll fade-ins
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    }),
+    { threshold: 0 }
+  );
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  });
+</script>
+
+</body>
+</html>

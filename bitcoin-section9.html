@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 9 — What It Means</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --btc:       #F7931A;
+    --btc-dim:   #a85e08;
+    --btc-glow:  rgba(247,147,26,.18);
+    --btc-glow2: rgba(247,147,26,.06);
+    --ink:       #0a0a0a;
+    --ink-2:     #111111;
+    --ink-3:     #1a1a1a;
+    --ruled:     rgba(255,255,255,.045);
+    --muted:     rgba(255,255,255,.38);
+    --faint:     rgba(255,255,255,.12);
+    --faint2:    rgba(255,255,255,.06);
+    --text:      rgba(255,255,255,.92);
+    --font-disp: 'Bebas Neue', sans-serif;
+    --font-body: 'Newsreader', serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SECTION WRAPPER ──────────────────────────────────── */
+  .meaning {
+    position: relative;
+    min-height: 100svh;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px) clamp(60px, 8vw, 100px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* ruled lines — same as hero */
+  .meaning::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 47px,
+      var(--ruled) 47px, var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* large watermark ₿ — mirrors hero */
+  .meaning::after {
+    content: '₿';
+    position: absolute;
+    left: -4vw;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-disp);
+    font-size: clamp(320px, 45vw, 700px);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(247,147,26,.05);
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+  }
+
+  /* ── SECTION LABEL ────────────────────────────────────── */
+  .section-label {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: clamp(56px, 8vw, 104px);
+  }
+  .section-label-text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--btc); }
+  .section-label-line { flex: 1; height: 1px; background: var(--faint); max-width: 120px; }
+  .section-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+
+  /* ── MAIN CONTENT ─────────────────────────────────────── */
+  .meaning-body {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+    flex: 1;
+  }
+
+  /* LEFT — the argument */
+  .meaning-left {}
+
+  .meaning-headline {
+    font-family: var(--font-disp);
+    font-size: clamp(56px, 8vw, 120px);
+    line-height: .92;
+    letter-spacing: .02em;
+    margin-bottom: clamp(32px, 4vw, 52px);
+  }
+
+  .meaning-headline .line-accent { color: var(--btc); display: block; }
+  .meaning-headline .line-dim    { color: rgba(255,255,255,.45); display: block; }
+
+  .meaning-prose {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 2.5vw, 28px);
+  }
+
+  .meaning-prose p {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.6vw, 20px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.68);
+  }
+
+  .meaning-prose p strong { color: var(--text); font-weight: 400; }
+  .meaning-prose p em     { font-style: italic; color: rgba(255,255,255,.45); }
+
+  /* pull quote */
+  .meaning-quote {
+    margin: clamp(24px, 3vw, 36px) 0;
+    padding: clamp(18px, 2.5vw, 28px) clamp(20px, 2.5vw, 32px);
+    border-left: 3px solid var(--btc);
+    background: var(--btc-glow2);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .meaning-quote p {
+    font-family: var(--font-body);
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.55;
+    color: rgba(255,255,255,.8);
+  }
+
+  .meaning-quote cite {
+    display: block;
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--btc-dim);
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  /* RIGHT — the pillars */
+  .meaning-right {
+    padding-top: clamp(8px, 1.5vw, 20px);
+  }
+
+  .pillars-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .pillar {
+    padding: clamp(18px, 2vw, 24px);
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    background: var(--ink-2);
+    margin-bottom: 3px;
+    transition: border-color .2s, background .2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--btc);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform .4s ease;
+  }
+
+  .pillar:hover { border-color: var(--btc-dim); background: var(--ink-3); }
+  .pillar:hover::before { transform: scaleY(1); }
+
+  .pillar-num {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--btc-dim);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .pillar-title {
+    font-family: var(--font-disp);
+    font-size: clamp(20px, 2.2vw, 30px);
+    line-height: 1;
+    letter-spacing: .02em;
+    margin-bottom: 8px;
+  }
+
+  .pillar-body {
+    font-family: var(--font-body);
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(255,255,255,.55);
+  }
+  .pillar-body strong { color: rgba(255,255,255,.8); font-weight: 400; }
+
+  /* ── FINAL STATEMENT ──────────────────────────────────── */
+  .final-statement {
+    position: relative; z-index: 1;
+    margin-top: clamp(48px, 7vw, 88px);
+    padding-top: clamp(32px, 4vw, 48px);
+    border-top: 1px solid var(--faint);
+  }
+
+  .final-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+  }
+
+  .final-text {
+    font-family: var(--font-disp);
+    font-size: clamp(28px, 4vw, 56px);
+    line-height: 1.0;
+    letter-spacing: .02em;
+    color: rgba(255,255,255,.25);
+    max-width: 800px;
+  }
+
+  .final-text span { color: var(--btc); }
+
+  /* live clock block */
+  .final-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .clock-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .clock-value {
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 1.4vw, 17px);
+    font-weight: 500;
+    color: var(--btc);
+    letter-spacing: .06em;
+  }
+
+  .clock-sub {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: .06em;
+  }
+
+  /* ── FOOTER LINE ──────────────────────────────────────── */
+  .footer-line {
+    position: relative; z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: clamp(32px, 4vw, 48px);
+    padding-top: 20px;
+    border-top: 1px solid var(--faint2);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-disclaimer {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    color: rgba(255,255,255,.2);
+    line-height: 1.8;
+  }
+
+  .footer-genesis {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.15);
+    text-align: right;
+  }
+
+  .footer-genesis span {
+    display: block;
+    color: rgba(247,147,26,.3);
+  }
+
+  /* ── FADE IN ──────────────────────────────────────────── */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ───────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .meaning-body  { grid-template-columns: 1fr; }
+    .meaning::after { display: none; }
+    .final-inner   { grid-template-columns: 1fr; }
+    .final-clock   { align-items: flex-start; }
+    .footer-line   { flex-direction: column; gap: 16px; }
+    .footer-genesis { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<section class="meaning" id="meaning">
+
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">What It Means</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">09 / 09</span>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="meaning-body">
+
+    <!-- LEFT — the argument -->
+    <div class="meaning-left fade-in">
+      <h2 class="meaning-headline">
+        This is not
+        <span class="line-accent">about money.</span>
+        <span class="line-dim">It never was.</span>
+      </h2>
+
+      <div class="meaning-prose">
+        <p>
+          Every monetary system in history has rested on a single
+          assumption: that someone, somewhere, can be trusted with
+          the power to create money. Kings. Governments. Central banks.
+          The institution changes. <strong>The assumption never does.</strong>
+        </p>
+
+        <p>
+          Bitcoin removes the assumption. It replaces trust in
+          institutions with trust in mathematics — a protocol that
+          runs the same rules for everyone, that no government can
+          inflate, no company can seize, and no committee can change
+          without the consent of every participant.
+          <strong>That is not a financial product. It is a political act.</strong>
+        </p>
+
+        <div class="meaning-quote">
+          <p>
+            "The root problem with conventional currency is all the
+            trust that's required to make it work. The central bank
+            must be trusted not to debase the currency, but the history
+            of fiat currencies is full of breaches of that trust."
+          </p>
+          <cite>— Satoshi Nakamoto, P2P Foundation Forum, February 11 2009</cite>
+        </div>
+
+        <p>
+          Bitcoin is the first technology in history that lets a
+          person <strong>opt out of the monetary system</strong> entirely —
+          to hold value that cannot be inflated away, confiscated by
+          decree, or frozen by a bank. Not because of a legal right.
+          Because of a mathematical property.
+        </p>
+
+        <p>
+          It will not fix human nature. It will not end corruption
+          or greed. What it does is remove one instrument of that
+          corruption — <em>the monopoly on money creation</em> —
+          and place it beyond the reach of any single actor.
+          <strong>That has never been done before.</strong>
+        </p>
+
+        <p>
+          Whether Bitcoin succeeds in its fullest ambition or not,
+          it has already proven something irreversible: that sound,
+          decentralised, censorship-resistant money is technically
+          possible. That proof cannot be uninvented. The idea is out.
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT — the pillars -->
+    <div class="meaning-right fade-in">
+      <span class="pillars-label">What Bitcoin actually is</span>
+
+      <div class="pillar">
+        <span class="pillar-num">01</span>
+        <h4 class="pillar-title">Separation of Money & State</h4>
+        <p class="pillar-body">
+          Just as the printing press separated knowledge from
+          institutional control, Bitcoin separates money from
+          political control. <strong>The consequences will take
+          generations to fully unfold.</strong>
+        </p>
+      </div>
+
+      <div class="pillar">
+        <span class="pillar-num">02</span>
+        <h4 class="pillar-title">Sovereignty</h4>
+        <p class="pillar-body">
+          Twelve words. Self-custody. No bank required, no account
+          to freeze, no border to stop a transaction.
+          <strong>Financial self-sovereignty</strong> available to
+          anyone on earth with a phone and an internet connection.
+        </p>
+      </div>
+
+      <div class="pillar">
+        <span class="pillar-num">03</span>
+        <h4 class="pillar-title">Absolute Scarcity</h4>
+        <p class="pillar-body">
+          There has never been a provably scarce asset before Bitcoin.
+          Gold is scarce. But more can always be mined.
+          <strong>21 million is a mathematical ceiling,</strong>
+          not a policy. It cannot be voted away.
+        </p>
+      </div>
+
+      <div class="pillar">
+        <span class="pillar-num">04</span>
+        <h4 class="pillar-title">Neutral Infrastructure</h4>
+        <p class="pillar-body">
+          Bitcoin doesn't care who you are, where you live,
+          or what your government thinks of you.
+          It validates transactions the same way for a
+          billionaire in Manhattan and a farmer in Zimbabwe.
+          <strong>The protocol has no prejudice.</strong>
+        </p>
+      </div>
+
+      <div class="pillar">
+        <span class="pillar-num">05</span>
+        <h4 class="pillar-title">An Exit</h4>
+        <p class="pillar-body">
+          Not a revolution. Not a takeover. An exit.
+          A door that anyone can walk through.
+          <strong>The most peaceful form of dissent
+          from a monetary system ever created</strong> —
+          you simply stop participating.
+        </p>
+      </div>
+    </div>
+
+  </div><!-- end meaning-body -->
+
+  <!-- FINAL STATEMENT -->
+  <div class="final-statement fade-in">
+    <div class="final-inner">
+      <p class="final-text">
+        Not investment advice.<br>
+        Not a guarantee.<br>
+        <span>A proof of concept for a world with honest money.</span>
+      </p>
+      <div class="final-clock">
+        <span class="clock-label">Network uptime</span>
+        <span class="clock-value" id="uptime-value">—</span>
+        <span class="clock-sub" id="uptime-sub">since block 0 · Jan 3, 2009</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-line fade-in">
+    <p class="footer-disclaimer">
+      This page contains no financial advice, no affiliate links, and no exchange referrals.<br>
+      All data sourced from public APIs. All opinions are the author's own.
+    </p>
+    <div class="footer-genesis">
+      <span>The Times 03/Jan/2009</span>
+      Chancellor on brink of second bailout for banks
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function () {
+
+  // ── Network uptime counter ────────────────────────────────
+  const GENESIS = new Date('2009-01-03T18:15:05Z').getTime();
+
+  function formatUptime() {
+    const now     = Date.now();
+    const diff    = now - GENESIS;
+    const days    = Math.floor(diff / 86400000);
+    const hours   = Math.floor((diff % 86400000) / 3600000);
+    const minutes = Math.floor((diff % 3600000)  / 60000);
+    const seconds = Math.floor((diff % 60000)    / 1000);
+
+    const years = Math.floor(days / 365);
+    const rem   = days % 365;
+
+    return {
+      display: `${years}y ${rem}d ${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`,
+      days
+    };
+  }
+
+  function tickUptime() {
+    const el    = document.getElementById('uptime-value');
+    const subEl = document.getElementById('uptime-sub');
+    if (!el) return;
+    const { display, days } = formatUptime();
+    el.textContent = display;
+    if (subEl) subEl.textContent = `${days.toLocaleString()} days · zero downtime`;
+  }
+
+  tickUptime();
+  setInterval(tickUptime, 1000);
+
+  // ── Scroll fade-ins ───────────────────────────────────────
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    }),
+    { threshold: 0 }
+  );
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  });
+
+})();
+</script>
+
+</body>
+</html>

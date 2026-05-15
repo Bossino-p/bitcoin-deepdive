@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 7 — Known Risks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --btc:        #F7931A;
+    --btc-dim:    #a85e08;
+    --btc-glow:   rgba(247,147,26,.18);
+    --btc-glow2:  rgba(247,147,26,.06);
+    --ink:        #0a0a0a;
+    --ink-2:      #111111;
+    --ink-3:      #1a1a1a;
+    --ruled:      rgba(255,255,255,.045);
+    --muted:      rgba(255,255,255,.38);
+    --faint:      rgba(255,255,255,.12);
+    --faint2:     rgba(255,255,255,.06);
+    --text:       rgba(255,255,255,.92);
+    --font-disp:  'Bebas Neue', sans-serif;
+    --font-body:  'Newsreader', serif;
+    --font-mono:  'IBM Plex Mono', monospace;
+
+    /* risk tones */
+    --risk-low:       #639922;
+    --risk-low-bg:    rgba(99,153,34,.08);
+    --risk-low-bdr:   rgba(99,153,34,.35);
+    --risk-med:       #BA7517;
+    --risk-med-bg:    rgba(186,117,23,.08);
+    --risk-med-bdr:   rgba(186,117,23,.35);
+    --risk-high:      #D85A30;
+    --risk-high-bg:   rgba(216,90,48,.08);
+    --risk-high-bdr:  rgba(216,90,48,.35);
+    --risk-sev:       #A32D2D;
+    --risk-sev-bg:    rgba(163,45,45,.08);
+    --risk-sev-bdr:   rgba(163,45,45,.4);
+
+    /* resilience tones */
+    --res-strong:   #639922;
+    --res-moderate: #BA7517;
+    --res-weak:     #D85A30;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SECTION WRAPPER ──────────────────────────────────── */
+  .risks {
+    position: relative;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+    overflow: hidden;
+  }
+
+  .risks::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 47px,
+      var(--ruled) 47px, var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── SECTION LABEL ────────────────────────────────────── */
+  .section-label {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: clamp(48px, 6vw, 80px);
+  }
+  .section-label-text { font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--btc); }
+  .section-label-line { flex: 1; height: 1px; background: var(--faint); max-width: 120px; }
+  .section-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+
+  /* ── INTRO ────────────────────────────────────────────── */
+  .risks-intro {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 4vw, 64px);
+    margin-bottom: clamp(56px, 7vw, 88px);
+    align-items: end;
+  }
+
+  .risks-intro-left h2 {
+    font-family: var(--font-disp);
+    font-size: clamp(48px, 6.5vw, 96px);
+    line-height: .92;
+    letter-spacing: .02em;
+    margin-bottom: 20px;
+  }
+
+  .risks-intro-left h2 span { color: var(--btc); display: block; }
+
+  .risks-intro-left p {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.5vw, 19px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.65);
+  }
+  .risks-intro-left p strong { color: var(--text); font-weight: 400; }
+
+  /* legend panel */
+  .risks-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: start;
+  }
+
+  .legend-title {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+
+  .legend-swatch {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-divider {
+    height: 1px;
+    background: var(--faint2);
+    margin: 6px 0;
+  }
+
+  /* ── TIER LABEL ───────────────────────────────────────── */
+  .tier-label {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 16px;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+  .tier-label:first-of-type { margin-top: 0; }
+  .tier-name { font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .tier-line { flex: 1; height: 1px; background: var(--faint2); }
+
+  /* ── RISK CARDS GRID ──────────────────────────────────── */
+  .risk-grid {
+    position: relative; z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  /* ── RISK CARD ────────────────────────────────────────── */
+  .risk-card {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 0.5px solid var(--faint);
+    transition: border-color .2s;
+  }
+
+  /* per-level border tones when open */
+  .risk-card.open[data-level="low"]  { border-color: var(--risk-low-bdr); }
+  .risk-card.open[data-level="med"]  { border-color: var(--risk-med-bdr); }
+  .risk-card.open[data-level="high"] { border-color: var(--risk-high-bdr); }
+  .risk-card.open[data-level="sev"]  { border-color: var(--risk-sev-bdr); }
+
+  /* ── CARD TRIGGER ─────────────────────────────────────── */
+  .risk-trigger {
+    width: 100%;
+    background: var(--ink-2);
+    border: none;
+    cursor: pointer;
+    padding: clamp(14px, 1.8vw, 20px) clamp(16px, 2vw, 24px);
+    display: grid;
+    grid-template-columns: auto 1fr auto auto auto;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    transition: background .2s;
+  }
+
+  .risk-card.open .risk-trigger { background: var(--ink-3); }
+  .risk-trigger:hover { background: var(--ink-3); }
+
+  /* level indicator strip */
+  .risk-level-strip {
+    width: 3px;
+    border-radius: 2px;
+    align-self: stretch;
+    min-height: 32px;
+    flex-shrink: 0;
+  }
+  [data-level="low"]  .risk-level-strip { background: var(--risk-low); }
+  [data-level="med"]  .risk-level-strip { background: var(--risk-med); }
+  [data-level="high"] .risk-level-strip { background: var(--risk-high); }
+  [data-level="sev"]  .risk-level-strip { background: var(--risk-sev); }
+
+  .risk-name-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .risk-name {
+    font-family: var(--font-disp);
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1;
+    letter-spacing: .02em;
+    color: var(--text);
+  }
+
+  .risk-tagline {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* risk pill */
+  .risk-pill {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 0.5px solid;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  [data-level="low"]  .risk-pill { color: var(--risk-low);  border-color: var(--risk-low-bdr);  background: var(--risk-low-bg); }
+  [data-level="med"]  .risk-pill { color: var(--risk-med);  border-color: var(--risk-med-bdr);  background: var(--risk-med-bg); }
+  [data-level="high"] .risk-pill { color: var(--risk-high); border-color: var(--risk-high-bdr); background: var(--risk-high-bg); }
+  [data-level="sev"]  .risk-pill { color: var(--risk-sev);  border-color: var(--risk-sev-bdr);  background: var(--risk-sev-bg); }
+
+  /* resilience badge */
+  .res-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 0.5px solid;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .res-badge.strong   { color: var(--res-strong);   border-color: rgba(99,153,34,.35);   background: rgba(99,153,34,.08); }
+  .res-badge.moderate { color: var(--res-moderate); border-color: rgba(186,117,23,.35); background: rgba(186,117,23,.08); }
+  .res-badge.weak     { color: var(--res-weak);     border-color: rgba(216,90,48,.35);  background: rgba(216,90,48,.08); }
+
+  .risk-chevron {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    color: var(--muted);
+    transition: transform .25s ease, color .2s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .risk-card.open .risk-chevron { transform: rotate(180deg); color: var(--btc); }
+
+  /* ── CARD PANEL ───────────────────────────────────────── */
+  .risk-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .4s cubic-bezier(.4,0,.2,1);
+  }
+  .risk-card.open .risk-panel { max-height: 700px; }
+
+  .risk-panel-inner {
+    padding: clamp(20px, 2.5vw, 28px) clamp(16px, 2vw, 24px);
+    border-top: 0.5px solid var(--faint);
+    background: var(--ink-2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  /* ── PANEL BODY ───────────────────────────────────────── */
+  .panel-body {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.3vw, 16px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.65);
+    margin-bottom: 16px;
+  }
+  .panel-body p + p { margin-top: 12px; }
+  .panel-body strong { color: var(--text); font-weight: 400; }
+  .panel-body em     { font-style: italic; color: rgba(255,255,255,.42); }
+  .panel-body code {
+    font-family: var(--font-mono);
+    font-size: .85em;
+    color: var(--btc);
+    background: var(--btc-glow2);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  /* verdict block */
+  .panel-verdict {
+    padding: 14px 16px;
+    border-radius: 4px;
+    border: 0.5px solid;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .04em;
+    line-height: 1.7;
+  }
+  .panel-verdict .verdict-label {
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+    opacity: .7;
+  }
+  .panel-verdict.strong   { color: var(--res-strong);   border-color: var(--risk-low-bdr);  background: var(--risk-low-bg); }
+  .panel-verdict.moderate { color: var(--res-moderate); border-color: var(--risk-med-bdr);  background: var(--risk-med-bg); }
+  .panel-verdict.concern  { color: var(--risk-high);    border-color: var(--risk-high-bdr); background: var(--risk-high-bg); }
+
+  /* ── METRICS PANEL ────────────────────────────────────── */
+  .panel-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .metric-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .bar-group { display: flex; flex-direction: column; gap: 10px; }
+
+  .bar-item {}
+  .bar-item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .bar-item-name {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .bar-item-val {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text);
+  }
+
+  .bar-track {
+    height: 5px;
+    background: var(--faint2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease .3s;
+  }
+  .bar-fill.green  { background: var(--risk-low); }
+  .bar-fill.amber  { background: var(--risk-med); }
+  .bar-fill.coral  { background: var(--risk-high); }
+  .bar-fill.red    { background: var(--risk-sev); }
+  .bar-fill.orange { background: var(--btc); }
+
+  /* data rows */
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 12px;
+    background: var(--ink-3);
+    border: 0.5px solid var(--faint2);
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .data-row .dr-key { color: var(--muted); font-size: 10px; }
+  .data-row .dr-val { color: var(--text); }
+  .data-row .dr-val.green  { color: var(--risk-low); }
+  .data-row .dr-val.amber  { color: var(--risk-med); }
+  .data-row .dr-val.red    { color: var(--risk-high); }
+  .data-row .dr-val.orange { color: var(--btc); }
+
+  /* ── CLOSING STATEMENT ────────────────────────────────── */
+  .risks-close {
+    position: relative; z-index: 1;
+    margin-top: clamp(40px, 5vw, 64px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2vw, 32px);
+  }
+
+  .close-card {
+    padding: clamp(20px, 2.5vw, 32px);
+    border: 0.5px solid var(--faint);
+    border-radius: 6px;
+    background: var(--ink-2);
+  }
+
+  .close-card-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .close-card-title {
+    font-family: var(--font-disp);
+    font-size: clamp(24px, 2.8vw, 38px);
+    line-height: 1.05;
+    letter-spacing: .02em;
+    margin-bottom: 12px;
+  }
+
+  .close-card-body {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.3vw, 16px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,.6);
+  }
+  .close-card-body strong { color: var(--text); font-weight: 400; }
+
+  /* ── FADE IN ──────────────────────────────────────────── */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ───────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .risks-intro  { grid-template-columns: 1fr; }
+    .risk-panel-inner { grid-template-columns: 1fr; }
+    .risks-close  { grid-template-columns: 1fr; }
+    .risk-trigger { grid-template-columns: auto 1fr auto auto; }
+    .res-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="risks" id="risks">
+
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">Known Risks</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">07 / 09</span>
+  </div>
+
+  <!-- INTRO + LEGEND -->
+  <div class="risks-intro fade-in">
+    <div class="risks-intro-left">
+      <h2>Bitcoin has<br>survived<br><span>everything.</span></h2>
+      <p>
+        A true bitcoiner doesn't dismiss threats — they understand them.
+        Every risk below is real. Some have already been tested.
+        <strong>What follows is an honest accounting</strong> of what
+        could affect Bitcoin, how likely it is, and why the network
+        is still standing after each attempt.
+      </p>
+    </div>
+    <div class="risks-legend">
+      <p class="legend-title">Risk level</p>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--risk-low)"></span>Low — unlikely under current conditions</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--risk-med)"></span>Medium — plausible, actively monitored</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--risk-high)"></span>High — real threat, requires adaptation</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--risk-sev)"></span>Existential — theoretical, not imminent</div>
+      <div class="legend-divider"></div>
+      <p class="legend-title">Network resilience</p>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--res-strong)"></span>Strong — proven or structurally defended</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--res-moderate)"></span>Moderate — defences exist, not complete</div>
+      <div class="legend-row"><span class="legend-swatch" style="background:var(--res-weak)"></span>Uncertain — open question</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TIER 1 — PROTOCOL THREATS
+       ══════════════════════════════════════════════════════ -->
+  <div class="tier-label fade-in">
+    <span class="tier-name">Protocol threats</span>
+    <span class="tier-line"></span>
+  </div>
+
+  <div class="risk-grid fade-in">
+
+    <!-- ── QUANTUM ─────────────────────────────────────── -->
+    <div class="risk-card" data-level="high" id="risk-quantum">
+      <button class="risk-trigger" onclick="toggleRisk('risk-quantum')" aria-expanded="false">
+        <span class="risk-level-strip"></span>
+        <div class="risk-name-wrap">
+          <span class="risk-name">Quantum Computing</span>
+          <span class="risk-tagline">ECDSA key vulnerability — long-term horizon</span>
+        </div>
+        <span class="risk-pill">High risk — long term</span>
+        <span class="res-badge moderate">Moderate resilience</span>
+        <span class="risk-chevron">⌄</span>
+      </button>
+      <div class="risk-panel" role="region">
+        <div class="risk-panel-inner">
+          <div>
+            <div class="panel-body">
+              <p>
+                A sufficiently powerful quantum computer running
+                <strong>Shor's algorithm</strong> could derive a private
+                key from a public key, breaking ECDSA — the signature
+                scheme Bitcoin currently uses. Addresses that have
+                never spent (public key unknown) are safe.
+                <strong>Reused addresses and exposed public keys
+                are the first exposure.</strong> Satoshi's early
+                coins — public keys long visible on-chain — are
+                theoretically at risk.
+              </p>
+              <p>
+                NIST finalised its first post-quantum cryptography
+                standards in 2024. Bitcoin can hard fork to quantum-resistant
+                signatures (<em>SPHINCS+, Lattice-based schemes</em>).
+                The honest question is not <em>if</em> Bitcoin will need
+                to upgrade — it's whether the upgrade happens
+                <strong>before</strong> a quantum machine capable of
+                attacking ECDSA exists.
+              </p>
+            </div>
+            <div class="panel-verdict moderate">
+              <span class="verdict-label">Verdict</span>
+              Not if, but when Bitcoin upgrades. The threat is real but
+              the timeline gives the network room. Watch IBM and Google's
+              qubit error-correction progress — that is the actual clock.
+            </div>
+          </div>
+          <div class="panel-metrics">
+            <span class="metric-label">Risk metrics</span>
+            <div class="bar-group">
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Likelihood (10yr)</span><span class="bar-item-val">~60%</span></div>
+                <div class="bar-track"><div class="bar-fill coral" style="width:60%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Potential impact</span><span class="bar-item-val">Critical</span></div>
+                <div class="bar-track"><div class="bar-fill red" style="width:85%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Current resilience</span><span class="bar-item-val">45%</span></div>
+                <div class="bar-track"><div class="bar-fill amber" style="width:45%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Post-migration resilience</span><span class="bar-item-val">High</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:88%"></div></div>
+              </div>
+            </div>
+            <div class="data-row"><span class="dr-key">NIST PQC standard</span><span class="dr-val green">Finalised 2024</span></div>
+            <div class="data-row"><span class="dr-key">Migration path</span><span class="dr-val amber">Hard fork required</span></div>
+            <div class="data-row"><span class="dr-key">Satoshi coins at risk</span><span class="dr-val red">Theoretically yes</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 51% ATTACK ──────────────────────────────────── -->
+    <div class="risk-card" data-level="low" id="risk-51">
+      <button class="risk-trigger" onclick="toggleRisk('risk-51')" aria-expanded="false">
+        <span class="risk-level-strip"></span>
+        <div class="risk-name-wrap">
+          <span class="risk-name">51% Attack</span>
+          <span class="risk-tagline">Hashrate majority — economically irrational at scale</span>
+        </div>
+        <span class="risk-pill">Low risk — today</span>
+        <span class="res-badge strong">Strong resilience</span>
+        <span class="risk-chevron">⌄</span>
+      </button>
+      <div class="risk-panel" role="region">
+        <div class="risk-panel-inner">
+          <div>
+            <div class="panel-body">
+              <p>
+                Controlling 51% of hashrate lets an attacker
+                <strong>double-spend and reorder recent transactions</strong>
+                — but not steal funds, reverse old blocks, or create
+                new bitcoin. At Bitcoin's current hashrate of ~700 EH/s,
+                a sustained attack would require billions in specialised
+                hardware and electricity. The attacker would be
+                destroying the value of the asset they're attacking
+                to profit from double-spends worth a fraction of the cost.
+              </p>
+              <p>
+                Smaller proof-of-work chains have been 51% attacked —
+                Bitcoin Gold, Bitcoin SV, Ethereum Classic.
+                <strong>Bitcoin itself has never been successfully attacked.</strong>
+                The honest miner incentive overwhelmingly dominates
+                at Bitcoin's scale.
+              </p>
+            </div>
+            <div class="panel-verdict strong">
+              <span class="verdict-label">Verdict</span>
+              This is a real concern for altcoins, not Bitcoin.
+              The attack cost exceeds any conceivable profit.
+              A nation-state could attempt it — but they'd be
+              publicly spending billions to achieve a temporary disruption.
+            </div>
+          </div>
+          <div class="panel-metrics">
+            <span class="metric-label">Risk metrics</span>
+            <div class="bar-group">
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Practical likelihood</span><span class="bar-item-val">~5%</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:5%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Potential impact</span><span class="bar-item-val">Moderate</span></div>
+                <div class="bar-track"><div class="bar-fill amber" style="width:55%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Bitcoin's resilience</span><span class="bar-item-val">~92%</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:92%"></div></div>
+              </div>
+            </div>
+            <div class="data-row"><span class="dr-key">Attack cost/hr (~2025)</span><span class="dr-val red">~$2B+</span></div>
+            <div class="data-row"><span class="dr-key">Bitcoin attacked?</span><span class="dr-val green">Never ✓</span></div>
+            <div class="data-row"><span class="dr-key">Altcoins attacked?</span><span class="dr-val red">Multiple times</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROTOCOL BUG ────────────────────────────────── -->
+    <div class="risk-card" data-level="med" id="risk-bug">
+      <button class="risk-trigger" onclick="toggleRisk('risk-bug')" aria-expanded="false">
+        <span class="risk-level-strip"></span>
+        <div class="risk-name-wrap">
+          <span class="risk-name">Protocol Bug</span>
+          <span class="risk-tagline">Critical vulnerability — 2010 overflow incident as precedent</span>
+        </div>
+        <span class="risk-pill">Medium risk</span>
+        <span class="res-badge moderate">Moderate resilience</span>
+        <span class="risk-chevron">⌄</span>
+      </button>
+      <div class="risk-panel" role="region">
+        <div class="risk-panel-inner">
+          <div>
+            <div class="panel-body">
+              <p>
+                In 2010, CVE-2010-5139 allowed someone to exploit an
+                integer overflow and create <strong>184 billion bitcoin</strong>
+                out of thin air. Satoshi patched it in hours.
+                The chain was rolled back. Bitcoin was 18 months old.
+              </p>
+              <p>
+                Since then, Bitcoin Core has become one of the most
+                scrutinised codebases on earth. Changes require
+                extensive peer review and broad consensus.
+                The <strong>Lightning Network introduces a significantly
+                larger attack surface</strong> — payment channels involve
+                more complex state and time-sensitive operations that
+                create new classes of exploitable edge cases.
+              </p>
+            </div>
+            <div class="panel-verdict moderate">
+              <span class="verdict-label">Verdict</span>
+              The base protocol is battle-hardened. The 2010 incident
+              is the proof of response capacity, not fragility.
+              Lightning is the more active attack surface today.
+              The open-source review culture is the primary defence.
+            </div>
+          </div>
+          <div class="panel-metrics">
+            <span class="metric-label">Risk metrics</span>
+            <div class="bar-group">
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Base protocol likelihood</span><span class="bar-item-val">~20%</span></div>
+                <div class="bar-track"><div class="bar-fill amber" style="width:20%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Potential impact</span><span class="bar-item-val">Critical</span></div>
+                <div class="bar-track"><div class="bar-fill red" style="width:78%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Response track record</span><span class="bar-item-val">Strong</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:80%"></div></div>
+              </div>
+            </div>
+            <div class="data-row"><span class="dr-key">Last critical bug</span><span class="dr-val amber">2010 (patched hours)</span></div>
+            <div class="data-row"><span class="dr-key">Lightning surface</span><span class="dr-val red">Larger, active</span></div>
+            <div class="data-row"><span class="dr-key">Review culture</span><span class="dr-val green">Rigorous ✓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end protocol risk grid -->
+
+  <!-- ══════════════════════════════════════════════════════
+       TIER 2 — EXTERNAL THREATS
+       ══════════════════════════════════════════════════════ -->
+  <div class="tier-label fade-in">
+    <span class="tier-name">External threats</span>
+    <span class="tier-line"></span>
+  </div>
+
+  <div class="risk-grid fade-in">
+
+    <!-- ── AI-ASSISTED ────────────────────────────────── -->
+    <div class="risk-card" data-level="med" id="risk-ai">
+      <button class="risk-trigger" onclick="toggleRisk('risk-ai')" aria-expanded="false">
+        <span class="risk-level-strip"></span>
+        <div class="risk-name-wrap">
+          <span class="risk-name">AI-Assisted Attacks</span>
+          <span class="risk-tagline">Emerging threat — accelerates both attack and defence</span>
+        </div>
+        <span class="risk-pill">Medium — emerging</span>
+        <span class="res-badge moderate">Uncertain resilience</span>
+        <span class="risk-chevron">⌄</span>
+      </button>
+      <div class="risk-panel" role="region">
+        <div class="risk-panel-inner">
+          <div>
+            <div class="panel-body">
+              <p>
+                AI lowers the cost of finding obscure vulnerabilities —
+                automated code auditing could surface protocol bugs
+                faster than human review catches them.
+                AI-optimised social engineering makes targeting
+                key holders, node operators, and developers
+                dramatically cheaper and more convincing.
+              </p>
+              <p>
+                The same tools defend: AI-assisted mempool anomaly
+                detection, real-time exploit monitoring, and
+                automated smart contract auditing.
+                <strong>Bitcoin's intentional simplicity is a structural
+                advantage</strong> — a minimal scripting language has
+                far less attack surface than Ethereum's Turing-complete
+                EVM. The near-term risk is primarily to
+                <em>custody and human operators</em>, not the protocol.
+              </p>
+            </div>
+            <div class="panel-verdict moderate">
+              <span class="verdict-label">Verdict</span>
+              Genuine emerging threat through the tooling it gives adversaries.
+              Bitcoin's minimal base layer is a real structural defence.
+              The greater risk today is AI-enhanced phishing targeting
+              self-custody holders — not AI attacking the protocol.
+            </div>
+          </div>
+          <div class="panel-metrics">
+            <span class="metric-label">Risk metrics</span>
+            <div class="bar-group">
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Likelihood (5yr)</span><span class="bar-item-val">~40%</span></div>
+                <div class="bar-track"><div class="bar-fill amber" style="width:40%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Potential impact</span><span class="bar-item-val">Moderate-High</span></div>
+                <div class="bar-track"><div class="bar-fill coral" style="width:65%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Defender advantage</span><span class="bar-item-val">~50/50</span></div>
+                <div class="bar-track"><div class="bar-fill amber" style="width:50%"></div></div>
+              </div>
+            </div>
+            <div class="data-row"><span class="dr-key">Protocol attack surface</span><span class="dr-val green">Minimal (simple scripting)</span></div>
+            <div class="data-row"><span class="dr-key">Custody risk</span><span class="dr-val red">High — human operators</span></div>
+            <div class="data-row"><span class="dr-key">AI defence tools</span><span class="dr-val amber">Emerging</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATE BAN ───────────────────────────────────── -->
+    <div class="risk-card" data-level="med" id="risk-state">
+      <button class="risk-trigger" onclick="toggleRisk('risk-state')" aria-expanded="false">
+        <span class="risk-level-strip"></span>
+        <div class="risk-name-wrap">
+          <span class="risk-name">State-Level Ban</span>
+          <span class="risk-tagline">China 2021 already ran this test — Bitcoin passed</span>
+        </div>
+        <span class="risk-pill">Medium risk</span>
+        <span class="res-badge strong">Strong resilience</span>
+        <span class="risk-chevron">⌄</span>
+      </button>
+      <div class="risk-panel" role="region">
+        <div class="risk-panel-inner">
+          <div>
+            <div class="panel-body">
+              <p>
+                China banned Bitcoin mining in May 2021, eliminating
+                ~65% of global hashrate overnight. Within two weeks
+                difficulty adjusted. Within six months hashrate
+                fully recovered, now distributed across the US,
+                Kazakhstan, and Canada.
+                <strong>The stress test already ran. Bitcoin passed.</strong>
+              </p>
+              <p>
+                A global coordinated ban would require unprecedented
+                geopolitical alignment between adversarial nations.
+                As Bitcoin becomes a strategic reserve asset —
+                with the US, El Salvador, and others holding it —
+                <strong>banning becomes self-harm.</strong>
+                The protocol runs over Tor, Blockstream Satellite,
+                and mesh networks. You cannot ban mathematics.
+              </p>
+            </div>
+            <div class="panel-verdict strong">
+              <span class="verdict-label">Verdict</span>
+              The China ban is the proof-of-concept. Geopolitical
+              fragmentation actually protects decentralisation.
+              The more nations hold Bitcoin, the less incentive
+              any nation has to destroy it.
+            </div>
+          </div>
+          <div class="panel-metrics">
+            <span class="metric-label">Risk metrics</span>
+            <div class="bar-group">
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Coordinated ban likelihood</span><span class="bar-item-val">~15%</span></div>
+                <div class="bar-track"><div class="bar-fill amber" style="width:15%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Potential disruption</span><span class="bar-item-val">High</span></div>
+                <div class="bar-track"><div class="bar-fill coral" style="width:70%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Bitcoin's resilience</span><span class="bar-item-val">~82%</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:82%"></div></div>
+              </div>
+            </div>
+            <div class="data-row"><span class="dr-key">China ban (2021)</span><span class="dr-val green">Survived — 6 months ✓</span></div>
+            <div class="data-row"><span class="dr-key">Hashrate recovery</span><span class="dr-val green">Full ✓</span></div>
+            <div class="data-row"><span class="dr-key">Satellite fallback</span><span class="dr-val orange">Blockstream active</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FEE CLIFF ───────────────────────────────────── -->
+    <div class="risk-card" data-level="med" id="risk-fee">
+      <button class="risk-trigger" onclick="toggleRisk('risk-fee')" aria-expanded="false">
+        <span class="risk-level-strip"></span>
+        <div class="risk-name-wrap">
+          <span class="risk-name">The Fee Cliff</span>
+          <span class="risk-tagline">Post-subsidy security — Bitcoin's only truly open question</span>
+        </div>
+        <span class="risk-pill">Medium — post-2140</span>
+        <span class="res-badge weak">Unresolved</span>
+        <span class="risk-chevron">⌄</span>
+      </button>
+      <div class="risk-panel" role="region">
+        <div class="risk-panel-inner">
+          <div>
+            <div class="panel-body">
+              <p>
+                When the block subsidy reaches zero (~2140), miners
+                must survive entirely on transaction fees. If fees
+                are insufficient, mining becomes unprofitable,
+                hashrate drops, and security degrades.
+                This is called the <strong>fee cliff</strong> — and it is
+                the most intellectually honest long-term concern
+                in Bitcoin. Serious bitcoiners debate it openly.
+              </p>
+              <p>
+                The bull case: by 2140, Bitcoin's market cap makes
+                even thin fees generate enormous absolute revenue.
+                Lightning may consolidate transactions, boosting
+                base-layer fee density.
+                <strong>The bear case:</strong> if block space demand
+                doesn't grow sufficiently, the security budget
+                becomes inadequate at scale. There is no resolved answer.
+                This is the one thing worth genuine intellectual humility on.
+              </p>
+            </div>
+            <div class="panel-verdict moderate">
+              <span class="verdict-label">Verdict</span>
+              Not a threat for generations — but the one structural
+              question the network will eventually answer through
+              fee market evolution. Any bitcoiner who dismisses it
+              has stopped thinking. Any critic who leads with it
+              hasn't done the timeline math.
+            </div>
+          </div>
+          <div class="panel-metrics">
+            <span class="metric-label">Risk metrics</span>
+            <div class="bar-group">
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Near-term likelihood</span><span class="bar-item-val">~3%</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:3%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Post-subsidy likelihood</span><span class="bar-item-val">~45%</span></div>
+                <div class="bar-track"><div class="bar-fill amber" style="width:45%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Current resilience</span><span class="bar-item-val">Strong</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:85%"></div></div>
+              </div>
+            </div>
+            <div class="data-row"><span class="dr-key">Last subsidy block</span><span class="dr-val amber">~2140</span></div>
+            <div class="data-row"><span class="dr-key">Current fee share</span><span class="dr-val orange">~15–25% of revenue</span></div>
+            <div class="data-row"><span class="dr-key">Resolved?</span><span class="dr-val red">No — open debate</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GOVERNANCE CAPTURE ──────────────────────────── -->
+    <div class="risk-card" data-level="low" id="risk-gov">
+      <button class="risk-trigger" onclick="toggleRisk('risk-gov')" aria-expanded="false">
+        <span class="risk-level-strip"></span>
+        <div class="risk-name-wrap">
+          <span class="risk-name">Governance Capture</span>
+          <span class="risk-tagline">Block size wars proved the defence — users hold the rules</span>
+        </div>
+        <span class="risk-pill">Low risk</span>
+        <span class="res-badge strong">Strong resilience</span>
+        <span class="risk-chevron">⌄</span>
+      </button>
+      <div class="risk-panel" role="region">
+        <div class="risk-panel-inner">
+          <div>
+            <div class="panel-body">
+              <p>
+                The block size wars (2015–2017) were an attempt to
+                co-opt Bitcoin's roadmap through miner and corporate
+                pressure. The result: Bitcoin Cash forked off and
+                Bitcoin Core's conservative, <strong>node-first governance
+                was vindicated.</strong>
+              </p>
+              <p>
+                Changing Bitcoin's consensus rules requires near-universal
+                node adoption — not majority votes, not corporate sign-off,
+                not miner signalling alone. There is no CEO, no foundation,
+                no Vitalik. The social consensus has proven
+                <strong>extraordinarily resistant to co-option.</strong>
+                The ossification that frustrates developers is the same
+                property that protects against capture.
+              </p>
+            </div>
+            <div class="panel-verdict strong">
+              <span class="verdict-label">Verdict</span>
+              The block size wars already ran this attack.
+              Bitcoin didn't bend. The slowness of change is a feature,
+              not a bug — it means no single actor can unilaterally
+              alter the rules that protect every holder.
+            </div>
+          </div>
+          <div class="panel-metrics">
+            <span class="metric-label">Risk metrics</span>
+            <div class="bar-group">
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Likelihood</span><span class="bar-item-val">~10%</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:10%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Impact if captured</span><span class="bar-item-val">Existential</span></div>
+                <div class="bar-track"><div class="bar-fill red" style="width:90%"></div></div>
+              </div>
+              <div class="bar-item">
+                <div class="bar-item-head"><span class="bar-item-name">Historical resistance</span><span class="bar-item-val">~92%</span></div>
+                <div class="bar-track"><div class="bar-fill green" style="width:92%"></div></div>
+              </div>
+            </div>
+            <div class="data-row"><span class="dr-key">Block size wars</span><span class="dr-val green">Nodes won ✓</span></div>
+            <div class="data-row"><span class="dr-key">Change mechanism</span><span class="dr-val orange">Near-universal consensus</span></div>
+            <div class="data-row"><span class="dr-key">Single point of control</span><span class="dr-val green">None ✓</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end external risk grid -->
+
+  <!-- CLOSING CARDS -->
+  <div class="risks-close fade-in">
+    <div class="close-card">
+      <span class="close-card-label">The honest summary</span>
+      <h4 class="close-card-title">Every threat above has been considered by people smarter than its critics.</h4>
+      <p class="close-card-body">
+        Bitcoin is not without risk. It has never claimed to be.
+        What it has done is survive every practical attack launched
+        against it for 16 years — exchange collapses, nation-state bans,
+        civil wars, market crashes, regulatory sieges.
+        <strong>The network has never missed a block.</strong>
+      </p>
+    </div>
+    <div class="close-card">
+      <span class="close-card-label">The one thing to watch</span>
+      <h4 class="close-card-title">Quantum computing is the only threat with a hard deadline.</h4>
+      <p class="close-card-body">
+        Every other risk on this page is either already survived,
+        economically irrational to execute, or a distant theoretical.
+        Quantum has a real timeline. The migration to post-quantum
+        cryptography needs to happen <strong>before</strong> a
+        sufficiently powerful machine exists. That window is open.
+        It will not stay open forever.
+      </p>
+    </div>
+  </div>
+
+</section>
+
+<script>
+  function toggleRisk(id) {
+    const card   = document.getElementById(id);
+    const btn    = card.querySelector('.risk-trigger');
+    const isOpen = card.classList.contains('open');
+
+    // close others in the same grid
+    const grid = card.closest('.risk-grid');
+    grid.querySelectorAll('.risk-card.open').forEach(el => {
+      if (el !== card) {
+        el.classList.remove('open');
+        el.querySelector('.risk-trigger').setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    card.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  // scroll fade-ins
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    }),
+    { threshold: 0 }
+  );
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  });
+</script>
+
+</body>
+</html>
