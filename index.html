@@ -2686,6 +2686,345 @@ footer {
     .risk-trigger     { grid-template-columns: auto 1fr auto auto; }
     .res-badge        { display: none; }
   }
+
+  /* ══════════════════════════════════════════════════════
+     SECTION 8 — READING LIST
+     ══════════════════════════════════════════════════════ */
+
+  .reads {
+    position: relative;
+    padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px);
+    overflow: hidden;
+  }
+
+  .reads::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 47px,
+      var(--ruled) 47px, var(--ruled) 48px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .reads-intro {
+    position: relative; z-index: 1;
+    max-width: 640px;
+    margin-bottom: clamp(48px, 6vw, 72px);
+  }
+
+  .reads-intro h2 {
+    font-family: var(--font-disp);
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: .95;
+    letter-spacing: .02em;
+    margin-bottom: 20px;
+  }
+  .reads-intro h2 span { color: var(--btc); }
+
+  .reads-intro p {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.5vw, 19px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,.65);
+  }
+  .reads-intro p strong { color: var(--text); font-weight: 400; }
+
+  /* ── READING ORDER HINT ───────────────────────────────── */
+  .reading-order {
+    position: relative; z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: clamp(32px, 4vw, 48px);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .reading-order::-webkit-scrollbar { display: none; }
+
+  .order-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .order-num {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 4px 10px;
+    border: 0.5px solid var(--faint);
+    border-radius: 2px;
+    background: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .order-arrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--faint);
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── BOOK GRID ────────────────────────────────────────── */
+  .book-grid {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(16px, 2.5vw, 32px);
+  }
+
+  .book-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 0.5px solid var(--faint);
+    transition: border-color .25s, transform .25s;
+    cursor: default;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .book-card:hover {
+    border-color: rgba(255,255,255,.25);
+    transform: translateY(-3px);
+  }
+
+  .book-cover {
+    position: relative;
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    min-height: clamp(160px, 18vw, 220px);
+    overflow: hidden;
+  }
+
+  .book-spine {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 12px 3px;
+    flex-shrink: 0;
+  }
+
+  .book-face {
+    position: relative;
+    padding: clamp(18px, 2.5vw, 28px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .book-face::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .book-face::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .book-face > * { position: relative; z-index: 1; }
+
+  .book-order-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 0.5px solid;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  .book-title {
+    font-family: var(--font-disp);
+    font-size: clamp(24px, 3vw, 40px);
+    line-height: 1.0;
+    letter-spacing: .02em;
+    margin-top: auto;
+  }
+
+  .book-body {
+    padding: clamp(16px, 2vw, 24px);
+    background: var(--ink-2);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .book-author {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .book-thesis {
+    font-family: var(--font-body);
+    font-size: clamp(14px, 1.3vw, 16px);
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255,255,255,.75);
+    font-style: italic;
+  }
+
+  .book-desc {
+    font-family: var(--font-body);
+    font-size: clamp(13px, 1.2vw, 15px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,.55);
+  }
+  .book-desc strong { color: var(--text); font-weight: 400; }
+
+  .book-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 0.5px solid var(--faint2);
+  }
+
+  .book-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 0.5px solid var(--faint);
+    color: var(--muted);
+  }
+
+  .book-best-after {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-left: auto;
+    flex-shrink: 0;
+    align-self: center;
+    white-space: nowrap;
+  }
+  .book-best-after span { color: var(--btc); }
+
+  /* ══════════════════════════════════════════════════════
+     INDIVIDUAL BOOK COLOUR PALETTES — hardcoded hex, intentional
+     ══════════════════════════════════════════════════════ */
+
+  /* 1 — The Bitcoin Standard — deep charcoal + gold */
+  #book-btc-standard .book-spine  { background: #1a1206; color: #c8922a; }
+  #book-btc-standard .book-face   { background: #0e0c07; }
+  #book-btc-standard .book-face::before {
+    background: radial-gradient(ellipse at 80% 20%, rgba(200,146,42,.18) 0%, transparent 60%);
+  }
+  #book-btc-standard .book-face::after {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,146,42,.15);
+    right: 20px; bottom: -30px;
+  }
+  #book-btc-standard .book-order-badge { color: #c8922a; border-color: rgba(200,146,42,.4); background: rgba(200,146,42,.06); }
+  #book-btc-standard .book-title       { color: #c8922a; }
+
+  /* 2 — The Fiat Standard — slate + acid green */
+  #book-fiat-standard .book-spine  { background: #0a1008; color: #6db33f; }
+  #book-fiat-standard .book-face   { background: #0d1409; }
+  #book-fiat-standard .book-face::before {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0px, transparent 18px,
+      rgba(109,179,63,.04) 18px, rgba(109,179,63,.04) 19px
+    );
+  }
+  #book-fiat-standard .book-face::after {
+    width: 0; height: 0;
+    border-left: 80px solid transparent;
+    border-right: 80px solid transparent;
+    border-bottom: 140px solid rgba(109,179,63,.05);
+    right: -10px; bottom: 0;
+  }
+  #book-fiat-standard .book-order-badge { color: #6db33f; border-color: rgba(109,179,63,.4); background: rgba(109,179,63,.06); }
+  #book-fiat-standard .book-title       { color: #a8e070; }
+
+  /* 3 — Layered Money — midnight blue + silver */
+  #book-layered-money .book-spine  { background: #060912; color: #8899cc; }
+  #book-layered-money .book-face   { background: #080c18; }
+  #book-layered-money .book-face::before {
+    background: radial-gradient(ellipse at 30% 70%, rgba(100,130,220,.12) 0%, transparent 55%);
+  }
+  #book-layered-money .book-face::after {
+    width: 160px; height: 1px;
+    background: linear-gradient(to right, transparent, rgba(136,153,204,.3), transparent);
+    left: 10%; bottom: 40px;
+  }
+  #book-layered-money .book-order-badge { color: #8899cc; border-color: rgba(136,153,204,.4); background: rgba(136,153,204,.06); }
+  #book-layered-money .book-title       { color: #b0c0e8; }
+
+  /* 4 — Broken Money — deep red + warm white */
+  #book-broken-money .book-spine  { background: #120608; color: #cc5544; }
+  #book-broken-money .book-face   { background: #160809; }
+  #book-broken-money .book-face::before {
+    background: radial-gradient(ellipse at 20% 80%, rgba(200,60,40,.15) 0%, transparent 55%);
+  }
+  #book-broken-money .book-face::after {
+    width: 2px; height: 80%;
+    background: linear-gradient(to bottom, transparent, rgba(200,60,40,.2), transparent);
+    right: 32px; top: 10%;
+  }
+  #book-broken-money .book-order-badge { color: #cc5544; border-color: rgba(200,85,68,.4); background: rgba(200,85,68,.06); }
+  #book-broken-money .book-title       { color: #e8a090; }
+
+  /* ── CLOSING SHELF LINE ───────────────────────────────── */
+  .shelf-line {
+    position: relative; z-index: 1;
+    margin-top: clamp(40px, 5vw, 64px);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .shelf-rule { flex: 1; height: 1px; background: var(--faint); }
+
+  .shelf-text {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.7;
+    max-width: 520px;
+  }
+  .shelf-text span { color: var(--btc); }
+
+  /* ── READS RESPONSIVE ──────────────────────────────────── */
+  @media (max-width: 700px) {
+    .book-grid { grid-template-columns: 1fr; }
+    .book-best-after { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -5089,7 +5428,200 @@ footer {
 
 
 <!-- ──────────────────────────────────────────
-     8. WHAT IT MEANS
+     8. READING LIST
+     ────────────────────────────────────────── -->
+<section class="reads" id="reads">
+
+  <!-- SECTION LABEL -->
+  <div class="section-label fade-in">
+    <span class="section-label-text">Reading List</span>
+    <span class="section-label-line"></span>
+    <span class="section-num">08 / 09</span>
+  </div>
+
+  <!-- INTRO -->
+  <div class="reads-intro fade-in">
+    <h2>Go deeper.<br><span>Go further.</span></h2>
+    <p>
+      This page covers the essentials. These four books go further —
+      each one answers a question the page raises but can't fully resolve.
+      <strong>Read them in order if you're new.</strong>
+      Read them in any order if you already know why you're here.
+    </p>
+  </div>
+
+  <!-- READING ORDER HINT -->
+  <div class="reading-order fade-in" aria-label="Suggested reading order">
+    <div class="order-step">
+      <span class="order-num">Start here →</span>
+    </div>
+    <div class="order-step">
+      <span class="order-num">01 · Layered Money</span>
+      <span class="order-arrow">→</span>
+    </div>
+    <div class="order-step">
+      <span class="order-num">02 · Bitcoin Standard</span>
+      <span class="order-arrow">→</span>
+    </div>
+    <div class="order-step">
+      <span class="order-num">03 · Broken Money</span>
+      <span class="order-arrow">→</span>
+    </div>
+    <div class="order-step">
+      <span class="order-num">04 · Fiat Standard</span>
+    </div>
+  </div>
+
+  <!-- BOOK GRID -->
+  <div class="book-grid">
+
+    <!-- ── THE BITCOIN STANDARD ────────────────────────── -->
+    <div class="book-card fade-in" id="book-btc-standard">
+      <div class="book-cover">
+        <div class="book-spine">Bitcoin Standard</div>
+        <div class="book-face">
+          <span class="book-order-badge">Read 2nd</span>
+          <h3 class="book-title">The Bitcoin<br>Standard</h3>
+        </div>
+      </div>
+      <div class="book-body">
+        <p class="book-author">Saifedean Ammous · 2018</p>
+        <p class="book-thesis">
+          "The most important book written about money in a generation."
+        </p>
+        <p class="book-desc">
+          Ammous builds the case for Bitcoin from first principles —
+          tracing the history of money from commodity to fiat,
+          explaining what makes something a good store of value,
+          and showing why Bitcoin's fixed supply and proof-of-work
+          make it the <strong>hardest money ever created.</strong>
+          Confrontational, uncompromising, and essential.
+          The book that converts economists.
+        </p>
+        <div class="book-meta">
+          <span class="book-tag">Monetary theory</span>
+          <span class="book-tag">Economics</span>
+          <span class="book-tag">Foundation</span>
+          <span class="book-best-after">Best after → <span>Layered Money</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── THE FIAT STANDARD ───────────────────────────── -->
+    <div class="book-card fade-in" id="book-fiat-standard">
+      <div class="book-cover">
+        <div class="book-spine">Fiat Standard</div>
+        <div class="book-face">
+          <span class="book-order-badge">Read 4th</span>
+          <h3 class="book-title">The Fiat<br>Standard</h3>
+        </div>
+      </div>
+      <div class="book-body">
+        <p class="book-author">Saifedean Ammous · 2021</p>
+        <p class="book-thesis">
+          "If Bitcoin Standard explains why Bitcoin, Fiat Standard explains what you're escaping."
+        </p>
+        <p class="book-desc">
+          The sequel that cuts deeper. Ammous dissects the fiat
+          monetary system as a technology — how it operates,
+          how it distorts economies, and what it has cost humanity
+          in deferred time preference, debt accumulation, and
+          <strong>the corruption of long-term thinking.</strong>
+          More provocative than the first book. Deliberately so.
+          Read it when you're ready to be angry.
+        </p>
+        <div class="book-meta">
+          <span class="book-tag">Fiat critique</span>
+          <span class="book-tag">Macro</span>
+          <span class="book-tag">Advanced</span>
+          <span class="book-best-after">Best after → <span>Bitcoin Standard</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LAYERED MONEY ───────────────────────────────── -->
+    <div class="book-card fade-in" id="book-layered-money">
+      <div class="book-cover">
+        <div class="book-spine">Layered Money</div>
+        <div class="book-face">
+          <span class="book-order-badge">Read 1st</span>
+          <h3 class="book-title">Layered<br>Money</h3>
+        </div>
+      </div>
+      <div class="book-body">
+        <p class="book-author">Nik Bhatia · 2021</p>
+        <p class="book-thesis">
+          "The gentlest and most clarifying on-ramp to understanding how money actually works."
+        </p>
+        <p class="book-desc">
+          Bhatia explains monetary systems as hierarchical layers —
+          gold, central bank reserves, commercial bank money,
+          and now Bitcoin. <strong>Start here if you're new</strong>
+          to monetary theory. The book demystifies how the dollar
+          system actually functions before showing where Bitcoin fits
+          as a new first layer. Accessible without being dumbed down.
+          The book that makes everything else click.
+        </p>
+        <div class="book-meta">
+          <span class="book-tag">Monetary history</span>
+          <span class="book-tag">Accessible</span>
+          <span class="book-tag">Start here</span>
+          <span class="book-best-after">Best as → <span>first read</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BROKEN MONEY ────────────────────────────────── -->
+    <div class="book-card fade-in" id="book-broken-money">
+      <div class="book-cover">
+        <div class="book-spine">Broken Money</div>
+        <div class="book-face">
+          <span class="book-order-badge">Read 3rd</span>
+          <h3 class="book-title">Broken<br>Money</h3>
+        </div>
+      </div>
+      <div class="book-body">
+        <p class="book-author">Lyn Alden · 2023</p>
+        <p class="book-thesis">
+          "The most rigorous, evidence-based monetary history Bitcoin has yet produced."
+        </p>
+        <p class="book-desc">
+          Alden approaches money as a macro analyst —
+          data-driven, historically grounded, intellectually honest
+          about Bitcoin's open questions. She traces the full history
+          of monetary systems, their failures, and why
+          <strong>information asymmetry is the root of monetary dysfunction.</strong>
+          Less ideological than Ammous, more empirical.
+          The book that converts sceptics because it doesn't require you
+          to accept premises — it shows you the evidence.
+        </p>
+        <div class="book-meta">
+          <span class="book-tag">Monetary history</span>
+          <span class="book-tag">Data-driven</span>
+          <span class="book-tag">Rigorous</span>
+          <span class="book-best-after">Best after → <span>Bitcoin Standard</span></span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end book-grid -->
+
+  <!-- SHELF LINE -->
+  <div class="shelf-line fade-in">
+    <span class="shelf-rule"></span>
+    <p class="shelf-text">
+      These four books represent <span>~2,000 pages</span> of monetary history, economic theory,
+      and technical analysis. This page is the summary.
+      The books are the argument.
+    </p>
+    <span class="shelf-rule"></span>
+  </div>
+
+</section>
+
+
+<!-- ──────────────────────────────────────────
+     9. WHAT IT MEANS
      ────────────────────────────────────────── -->
 <section id="meaning">
   <div class="s-inner">
@@ -5575,9 +6107,15 @@ requestAnimationFrame(() => {
     <span class="sidenav-label">Known Risks</span>
   </a>
 
-  <a class="sidenav-item" href="#meaning" aria-label="What Bitcoin represents section">
+  <a class="sidenav-item" href="#reads" aria-label="Reading list section">
     <span class="sidenav-dot"></span>
     <span class="sidenav-num">08</span>
+    <span class="sidenav-label">Reading List</span>
+  </a>
+
+  <a class="sidenav-item" href="#meaning" aria-label="What Bitcoin represents section">
+    <span class="sidenav-dot"></span>
+    <span class="sidenav-num">09</span>
     <span class="sidenav-label">What It Means</span>
   </a>
 
@@ -5592,7 +6130,7 @@ requestAnimationFrame(() => {
 
   const sectionIds = [
     'hero','origin','timeline','mechanics',
-    'tokenomics','upgrades','risks','meaning'
+    'tokenomics','upgrades','risks','reads','meaning'
   ];
 
   const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
@@ -5658,6 +6196,16 @@ requestAnimationFrame(() => {
 </script>
 
 <script>
+const readsObserver = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); readsObserver.unobserve(e.target); }
+  }),
+  { threshold: 0 }
+);
+requestAnimationFrame(() => {
+  document.querySelectorAll('.reads .fade-in').forEach(el => readsObserver.observe(el));
+});
+
 function toggleRisk(id) {
   const card   = document.getElementById(id);
   const btn    = card.querySelector('.risk-trigger');
